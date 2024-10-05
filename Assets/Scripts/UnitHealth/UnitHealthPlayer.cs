@@ -53,6 +53,13 @@ public class UnitHealthPlayer
         }
 
     }
+          public void VelDmgUnit(int dmgAmount, int Velocity)
+    {
+        if (currentHealth > 0)
+        {
+            currentHealth -= dmgAmount * Velocity;
+        }
+    }
 
     //En caso de hacer un sistema de curacion, se implementa la misma logica, pero con MaxHealth
     
