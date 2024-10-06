@@ -70,6 +70,10 @@ public class HeavyEnemy : MonoBehaviour
         // Calcula la magnitud de la velocidad y la convierte a entero
         velocityMagnitude = Mathf.RoundToInt(rb.velocity.magnitude);
     }
+    else
+    {
+        maxSpeed = 0;
+    }
 }
 
 

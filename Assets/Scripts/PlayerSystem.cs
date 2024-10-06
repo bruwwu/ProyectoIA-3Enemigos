@@ -10,6 +10,8 @@ public class PlayerSystem : MonoBehaviour
     public float rotationSensitivity = 210f;
     private Vector3 rotationInput = Vector3.zero; 
 
+    public CameraSystem cameraSystem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +37,29 @@ public class PlayerSystem : MonoBehaviour
         {
             PlayerTakeDmg(20);
             Debug.Log(GameManager.gameManager.playerHealth.Health);
+        }
+
+        switch (other.gameObject.tag)
+        {
+            case "Zona 1":
+                cameraSystem.Zona1 = true;
+                break;
+            case "Zona 2":
+                cameraSystem.Zona1 = false;
+                cameraSystem.Zona2 = true;
+                break;
+            case "Zona 3":
+                cameraSystem.Zona2 = false;
+                cameraSystem.Zona3 = true;
+                break;
+            case "Zona 4":
+                cameraSystem.Zona3 = false;
+                cameraSystem.Zona4 = true;
+                break;
+            case "Zona 5":
+                cameraSystem.Zona4 = false;
+                cameraSystem.Zona5 = true;
+                break;
         }
     }
 

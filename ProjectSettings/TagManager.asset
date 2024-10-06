@@ -10,6 +10,11 @@ TagManager:
   - bruwuFem
   - juanitoTorreta
   - Piso
+  - Zona 1
+  - Zona 2
+  - Zona 3
+  - Zona 4
+  - Zona 5
   layers:
   - Default
   - TransparentFX

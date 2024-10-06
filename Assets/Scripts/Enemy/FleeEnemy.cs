@@ -46,9 +46,10 @@ public class FleeEnemy : MonoBehaviour
 
             // Calcula la magnitud de la velocidad y la convierte a entero
             velocityMagnitude = Mathf.RoundToInt(Velocity.magnitude);
+
+            // Aplica la fuerza de dirección al Rigidbody usando AddForce
+            rb.AddForce(Velocity, ForceMode.Force);
             
-            // Actualiza la posición del objeto según la velocidad calculada
-            transform.position += Velocity * Time.deltaTime;
         }
         else
         {
@@ -56,6 +57,7 @@ public class FleeEnemy : MonoBehaviour
             StartCoroutine(lockIn());
         }
     }
+
 
     // Método para calcular la dirección de un punto a otro
     public Vector3 PuntaMenosCola(Vector3 Punta, Vector3 Cola)
