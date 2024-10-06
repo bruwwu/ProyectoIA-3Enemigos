@@ -46,6 +46,9 @@ public class UnitHealthEnemy
         if (currentHealth > 0)
         {
             currentHealth -= dmgAmount;
+            if(currentHealth <= 0){
+                currentHealth = 0;
+            }
         }
     }
 

@@ -71,7 +71,7 @@ public class LookAtYon : MonoBehaviour
             Rigidbody rb = Balatemporal.GetComponent<Rigidbody>();
             rb.AddForce(transform.forward * BalaVelocidad);
 
-            Destroy(Balatemporal, 1f);
+            Destroy(Balatemporal, 2f);
             StartCoroutine(WaitFor());
         }
     }
