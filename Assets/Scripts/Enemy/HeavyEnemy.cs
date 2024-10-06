@@ -26,52 +26,56 @@ public class HeavyEnemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-   void Update()
-{
-    // Verificar si el jugador está dentro del radio de acción
-    if (Utilities.Utility.IsInsideRadius(playerGameObject.transform.position, transform.position, sphereRadious))
+    void Update()
     {
-        // Calcula la dirección hacia el jugador (Seek)
-        Vector3 directionToPlayer = PuntaMenosCola(playerGameObject.transform.position, transform.position);
-        float distanceToPlayer = directionToPlayer.magnitude;
-
-        // Si está cerca del jugador, reduce la velocidad para evitar movimientos bruscos
-        if (distanceToPlayer < slowDownRadius)
+        // Verificar si el jugador está dentro del radio de acción
+        if (Utilities.Utility.IsInsideRadius(playerGameObject.transform.position, transform.position, sphereRadious))
         {
-            maxSpeed = Mathf.Lerp(maxSpeed, 0, Time.deltaTime);
+            // Calcula la dirección hacia el jugador (Seek)
+            Vector3 directionToPlayer = PuntaMenosCola(playerGameObject.transform.position, transform.position);
+            float distanceToPlayer = directionToPlayer.magnitude;
+
+            // Si está cerca del jugador, reduce la velocidad para evitar movimientos bruscos
+            if (distanceToPlayer < slowDownRadius)
+            {
+                maxSpeed = Mathf.Lerp(maxSpeed, 0, Time.deltaTime);
+            }
+            else
+            {
+                maxSpeed = 5f; // Restablece la velocidad máxima si está fuera del radio de desaceleración
+            }
+
+            // Calcula la dirección normalizada (sin magnitud) hacia el jugador
+            Vector3 desiredVelocity = directionToPlayer.normalized * maxSpeed;
+
+            // Calcula la fuerza de dirección (fuerza necesaria para cambiar la velocidad)
+            Vector3 steering = desiredVelocity - Velocity;
+
+            // Limita la aceleración para que no sea demasiado abrupta
+            steering = Vector3.ClampMagnitude(steering, maxAcceleration);
+
+            // Aplica la fuerza de dirección a la velocidad actual
+            Velocity += steering * Time.deltaTime;
+            
+            // Limita la velocidad para no exceder el máximo permitido
+            Velocity = Vector3.ClampMagnitude(Velocity, maxSpeed);
+
+            // Suaviza la rotación del enemigo hacia la dirección deseada
+            if (Velocity.magnitude > 0.1f) // Evita rotación innecesaria cuando está casi quieto
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(Velocity);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+            }
+
+            // Mover el enemigo usando Rigidbody para respetar las colisiones
+            rb.MovePosition(rb.position + Velocity * Time.deltaTime);
+
+            // Calcula la magnitud de la velocidad y la convierte a entero
+            velocityMagnitude = Mathf.RoundToInt(Velocity.magnitude);
+            
+
         }
-        else
-        {
-            maxSpeed = 5f; // Restablece la velocidad máxima si está fuera del radio de desaceleración
-        }
-
-        // Calcula la dirección normalizada hacia el jugador
-        Vector3 desiredVelocity = directionToPlayer.normalized * maxSpeed;
-
-        // Calcula la fuerza de dirección (fuerza necesaria para cambiar la velocidad)
-        Vector3 steering = desiredVelocity - rb.velocity;
-
-        // Limita la aceleración para que no sea demasiado abrupta
-        steering = Vector3.ClampMagnitude(steering, maxAcceleration);
-
-        // Aplica la fuerza de dirección al Rigidbody usando AddForce
-        rb.AddForce(steering, ForceMode.Acceleration);
-
-        // Limita la velocidad para no exceder el máximo permitido
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
-
-        // Suaviza la rotación del enemigo hacia la dirección deseada
-        if (rb.velocity.magnitude > 0.1f) // Evita rotación innecesaria cuando está casi quieto
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(rb.velocity);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
-        }
-
-        // Calcula la magnitud de la velocidad y la convierte a entero
-        velocityMagnitude = Mathf.RoundToInt(rb.velocity.magnitude);
     }
-}
-
 
     // Método para calcular la dirección de un punto a otro
     public Vector3 PuntaMenosCola(Vector3 Punta, Vector3 Cola)
