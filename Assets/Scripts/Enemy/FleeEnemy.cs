@@ -22,8 +22,13 @@ public class FleeEnemy : MonoBehaviour
 
     private bool block;
     
+    private Rigidbody rb;
     // Variable para almacenar la magnitud de la velocidad
     private int velocityMagnitude;
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     void Update()
     {
