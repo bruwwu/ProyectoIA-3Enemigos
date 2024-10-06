@@ -18,6 +18,31 @@ public class Bullet : MonoBehaviour
             }
             Destroy(gameObject);
         }
+        else if(collision.gameObject.tag == "juanitoTorreta")
+        {
+            Debug.Log("Disparaste a un amogus");
+            GameManager.gameManager.juanitoTorreta.DmgUnit(15);
+            Debug.Log(GameManager.gameManager.juanitoTorreta.Health);
+            if(GameManager.gameManager.juanitoTorreta.Health == 0)
+            {
+                Debug.Log("Amogus Muerto");
+                Destroy(collision.gameObject);
+            }
+            Destroy(gameObject);
+        }
+          else if(collision.gameObject.tag == "bruwuFem")
+        {
+            Debug.Log("Disparaste a un amogus");
+            GameManager.gameManager.bruwuFem.DmgUnit(15);
+            Debug.Log(GameManager.gameManager.bruwuFem.Health);
+            if(GameManager.gameManager.bruwuFem.Health == 0)
+            {
+                Debug.Log("Amogus Muerto");
+                Destroy(collision.gameObject);
+            }
+            Destroy(gameObject);
+        }
+        
         else if(collision.gameObject.tag == "Wall")
         {
             Debug.Log("Alv, la bala choca con la pared");

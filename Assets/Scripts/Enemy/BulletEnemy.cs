@@ -7,9 +7,9 @@ public class BulletEnemy : MonoBehaviour
     // Asegúrate de arrastrar un GameObject que tenga el script HB_Slider
     [SerializeField] HB_Slider hBb_Slider; 
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player")
         {
             Debug.Log("Me follan");
             
