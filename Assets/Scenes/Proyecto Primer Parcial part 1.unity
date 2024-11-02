@@ -4474,6 +4474,12 @@ Transform:
   - {fileID: 1255466708}
   m_Father: {fileID: 317963927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &444097751 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3366524006984645090, guid: d911523ec313f894db4c4d25398d0b0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1805968412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &445114347
 GameObject:
   m_ObjectHideFlags: 0
@@ -6404,6 +6410,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: juanitoTorreta
+      objectReference: {fileID: 0}
+    - target: {fileID: 6408126273609502631, guid: 38f915e94071baf45a456ea060b92247,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6408126273609502631, guid: 38f915e94071baf45a456ea060b92247,
         type: 3}
@@ -17765,17 +17776,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 5
-  json: "{\"Options\":[],\"Parameters\":[],\"SpeechNodes\":[{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":1}],\"EditorInfo\":{\"isRoot\":true,\"xPos\":166.5,\"yPos\":22},\"ID\":0,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"Hola,
+  json: "{\"Options\":[],\"Parameters\":[],\"SpeechNodes\":[{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[{\"__type\":\"EditableBoolCondition:#DialogueEditor\",\"ParameterName\":\"skip\",\"CheckType\":0,\"RequiredValue\":true}],\"NodeUID\":1}],\"EditorInfo\":{\"isRoot\":true,\"xPos\":214.5,\"yPos\":28},\"ID\":0,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"Hola,
     profe! Decidimos darle un toque especial a este proyecto y, por supuesto, a\xF1adirle
-    ese toque de sabor. \xBFQu\xE9 ser\xEDa de esto sin el toque unico, verdad?\",\"parentUIDs\":[],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":false,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0,\"Volume\":0.4},{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":2}],\"EditorInfo\":{\"isRoot\":false,\"xPos\":166,\"yPos\":133},\"ID\":1,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"\xA1As\xED
+    ese toque de sabor. \xBFQu\xE9 ser\xEDa de esto sin el toque unico, verdad?\",\"parentUIDs\":[],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":true,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0.1,\"Volume\":0.4},{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":2}],\"EditorInfo\":{\"isRoot\":false,\"xPos\":216,\"yPos\":143},\"ID\":1,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"\xA1As\xED
     que aqu\xED me tienes! Soy GalliDam, el NPC encargado de hacer que tu experiencia
-    aqu\xED sea, bueno, inolvidable... o algo as\xED.\",\"parentUIDs\":[0],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":false,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0,\"Volume\":0.4},{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":3}],\"EditorInfo\":{\"isRoot\":false,\"xPos\":164,\"yPos\":242},\"ID\":2,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"En
+    aqu\xED sea, bueno, inolvidable... o algo as\xED.\",\"parentUIDs\":[0],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":true,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0.1,\"Volume\":0.4},{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":3}],\"EditorInfo\":{\"isRoot\":false,\"xPos\":214,\"yPos\":250},\"ID\":2,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"En
     fin, a lo que ven\xEDa: Este nivel es un poquit\xEDn largo, nada del otro mundo.
     Tendr\xE1s el placer de pasearte por cuatro cuartitos. Los primeros tres tienen
-    un solo enemigo cada uno, \xA1perfectos para que verifique las mecanicas!\",\"parentUIDs\":[1],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":false,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0,\"Volume\":0.3},{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":4}],\"EditorInfo\":{\"isRoot\":false,\"xPos\":163,\"yPos\":336},\"ID\":3,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"Pero,
+    un solo enemigo cada uno, \xA1perfectos para que verifique las mecanicas!\",\"parentUIDs\":[1],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":true,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0.1,\"Volume\":0.3},{\"Connections\":[{\"__type\":\"EditableSpeechConnection:#DialogueEditor\",\"Conditions\":[],\"NodeUID\":4}],\"EditorInfo\":{\"isRoot\":false,\"xPos\":212,\"yPos\":343},\"ID\":3,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"Pero,
     ah, redoble de tambores... \xA1en el \xFAltimo cuarto te espera una peque\xF1a
     sorpresa! Tres enemigos, listos para darte la bienvenida con una emboscada...
-    \xA1Ups! \xBFAcabo de hacer un spoiler? Ah, bueno, ya te lo sabes.\",\"parentUIDs\":[2],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":false,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0,\"Volume\":0.3},{\"Connections\":[],\"EditorInfo\":{\"isRoot\":false,\"xPos\":162,\"yPos\":443},\"ID\":4,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"Y
+    \xA1Ups! \xBFAcabo de hacer un spoiler? Ah, bueno, ya te lo sabes.\",\"parentUIDs\":[2],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":true,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0.1,\"Volume\":0.3},{\"Connections\":[],\"EditorInfo\":{\"isRoot\":false,\"xPos\":211,\"yPos\":450},\"ID\":4,\"ParamActions\":[],\"TMPFontGUID\":null,\"Text\":\"Y
     eso ser\xEDa todo de mi parte, si es que estuviste prestando atenci\xF3n, porque
     no repito las cosas... \xA1As\xED que buena suerte, la vas a necesitar! \",\"parentUIDs\":[3],\"AdvanceDialogueAutomatically\":false,\"AudioGUID\":null,\"AutoAdvanceShouldDisplayOption\":false,\"IconGUID\":null,\"Name\":\"GalliDam\",\"OptionUIDs\":null,\"SpeechUID\":0,\"TimeUntilAdvance\":0,\"Volume\":0.3}]}"
   saveVersion: 110
@@ -18212,7 +18223,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3366524006984645090, guid: d911523ec313f894db4c4d25398d0b0a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1805968416}
   m_SourcePrefab: {fileID: 100100000, guid: d911523ec313f894db4c4d25398d0b0a, type: 3}
 --- !u!4 &1805968413 stripped
 Transform:
@@ -18220,6 +18235,33 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1805968412}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &1805968416
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444097751}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
 --- !u!1001 &1815763599
 PrefabInstance:
   m_ObjectHideFlags: 0

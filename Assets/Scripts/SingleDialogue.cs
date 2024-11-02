@@ -40,6 +40,7 @@ public class SingleDialogue : MonoBehaviour
         EnablePlayerMovement();
         puertaInicio.SetActive(false);
 
+
         // Desuscríbete del evento para evitar múltiples suscripciones
         ConversationManager.OnConversationEnded -= HandleConversationEnded;
     }
