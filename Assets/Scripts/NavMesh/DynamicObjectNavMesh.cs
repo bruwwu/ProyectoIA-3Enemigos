@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class DynamicObjectNavMesh : MonoBehaviour
@@ -8,8 +9,9 @@ public class DynamicObjectNavMesh : MonoBehaviour
     public Transform endPoint;    
     public float lerpSpeed = 1.0f;
 
+    
     // Update is called once per frame
-    void Update()
+    void Update() //Hola yon, Juan ya es dinamico 
     {
         // Lerp entre startPoint y endPoint basado en el tiempo
         float lerpValue = Mathf.PingPong(Time.time * lerpSpeed, 1); // Alterna entre 0 y 1 basado en el tiempo
