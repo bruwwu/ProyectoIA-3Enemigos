@@ -12,6 +12,11 @@ public class PlayerSystem : MonoBehaviour
 
     public CameraSystem cameraSystem;
 
+    // Para aplicar la gravedad
+    public float gravity = -9.81f; // Gravedad estándar
+    private Vector3 velocity; // Velocidad del jugador, incluyendo gravedad
+    private bool isGrounded; // Para verificar si el jugador está tocando el suelo
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,14 +26,31 @@ public class PlayerSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Verificar si el jugador está tocando el suelo
+        isGrounded = characterController.isGrounded;
+
+        // Movimiento en el plano XZ
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")); 
-        
         characterController.Move(move * Time.deltaTime * MoveSpeed);
 
+        // Rotación
         rotationInput.x = Input.GetAxis("Mouse X") * rotationSensitivity * Time.deltaTime;
         rotationInput.y = Input.GetAxis("Mouse Y") * rotationSensitivity * Time.deltaTime;
 
         transform.Rotate(Vector3.up * rotationInput.x);
+
+        // Aplicar gravedad si no está tocando el suelo
+        if (!isGrounded)
+        {
+            velocity.y += gravity * Time.deltaTime; // Aumenta la velocidad con la gravedad
+        }
+        else
+        {
+            velocity.y = -2f; // Para que el jugador no "flote" cuando toque el suelo
+        }
+
+        // Aplicar la velocidad con gravedad y movimiento
+        characterController.Move(velocity * Time.deltaTime);
     }
 
     void OnTriggerEnter(Collider other)

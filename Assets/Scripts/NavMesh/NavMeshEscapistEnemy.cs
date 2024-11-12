@@ -2,30 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
+using DebugManager;
+using Utilities;
+using Unity.AI.Navigation;
 
 public class NavMeshEscapistEnemy : MonoBehaviour
 {
-     [Header("VisionCone")]
-    public Transform Enemy;
-    public Transform player;
-    private bool isDetected = false;
-    [SerializeField] HB_Slider hB_Slider;
-    public GameObject playerGameObject;
-    public Vector3 Velocity = Vector3.zero;
-    public float sphereRadious;
-    public float maxSpeed = 5f;
-    public float maxAcceleration = 5f;
 
-    [Header("Shooting")]
-    public GameObject Mira;
-    public GameObject BalaPrefabInicio;
-    public float BalaVelocidad;
+[Header("VisionCone - Detección del Jugador")]
+public Transform Enemy;
+public Transform player; 
+private bool isDetected = false; 
+[SerializeField] HB_Slider hB_Slider;
+public GameObject playerGameObject; 
+public float sphereRadious; 
+public float coneAngle;
+public float coneDistance;
 
-    private bool block;
+[Header("Movement - Movimiento y Física")]
+public Vector3 Velocity = Vector3.zero; 
+public float maxSpeed = 5f; 
+public float maxAcceleration = 5f; 
 
-    private NavMeshAgent navMeshAgent;
-    
-    private Rigidbody rb;
+[Header("Shooting - Sistema de Disparo")]
+public GameObject Mira; 
+public GameObject BalaPrefabInicio; 
+public float BalaVelocidad; 
+
+[Header("Behavior - Estado y Comportamiento")]
+private bool block; 
+private bool isChasing; 
+
+[Header("Components - Componentes")]
+private NavMeshAgent navMeshAgent; // Agente de navegación para el movimiento
+public Transform agentTransform; 
+private Rigidbody rb; 
+public NavMeshSurface ARTURO;
+
     // Variable para almacenar la magnitud de la velocidad
     private int velocityMagnitude;
     void Start()
@@ -36,20 +49,36 @@ public class NavMeshEscapistEnemy : MonoBehaviour
 
     void Update()
     {
+        // Detectar si el jugador está dentro del radio
         if (Utilities.Utility.IsInsideRadius(playerGameObject.transform.position, transform.position, sphereRadious))
         {
             isDetected = true;
+
             // Calcula la dirección hacia el objetivo (Seek)
             Vector3 PosToTarget = -PuntaMenosCola(playerGameObject.transform.position, transform.position);
             Vector3 dirToPlayer = transform.position - player.transform.position;
             Vector3 newPos = transform.position + dirToPlayer;
 
+            // Establecer la nueva posición de destino
             navMeshAgent.SetDestination(newPos);
+
+            // Recalcular el NavMesh dinámicamente si es necesario
+            if (ARTURO != null)
+            {
+                ARTURO.BuildNavMesh(); // Reconstruye la malla de navegación
+            }
         }
         else
         {
             isDetected = false;
             StartCoroutine(lockIn());
+        }
+    }
+
+     void OnDrawGizmos()
+    {
+        if(DebugGizmoManager.VisionCone){
+            Utility.DrawVisionCone(agentTransform.position, coneAngle, coneDistance, isChasing, agentTransform); //Dibuja el cono en la posicion del Zdraada
         }
     }
 
