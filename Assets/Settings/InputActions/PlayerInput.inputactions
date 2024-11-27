@@ -132,6 +132,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "pitufin",
+            "id": "8a42279e-f8aa-4f1a-8d60-639f48fa9181",
+            "actions": [
+                {
+                    "name": "R Ability",
+                    "type": "Button",
+                    "id": "25bb4a82-9342-43ce-9508-3c164478ea72",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f12b1159-128e-40d2-9a79-b634af24f191",
+                    "path": "<Keyboard>/r",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "R Ability",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

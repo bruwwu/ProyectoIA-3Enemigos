@@ -154,6 +154,34 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""pitufin"",
+            ""id"": ""8a42279e-f8aa-4f1a-8d60-639f48fa9181"",
+            ""actions"": [
+                {
+                    ""name"": ""R Ability"",
+                    ""type"": ""Button"",
+                    ""id"": ""25bb4a82-9342-43ce-9508-3c164478ea72"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f12b1159-128e-40d2-9a79-b634af24f191"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""R Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -164,6 +192,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_CharacterControls_Run = m_CharacterControls.FindAction("Run", throwIfNotFound: true);
         m_CharacterControls_DodgeRoll = m_CharacterControls.FindAction("Dodge Roll", throwIfNotFound: true);
         m_CharacterControls_Hit = m_CharacterControls.FindAction("Hit", throwIfNotFound: true);
+        // pitufin
+        m_pitufin = asset.FindActionMap("pitufin", throwIfNotFound: true);
+        m_pitufin_RAbility = m_pitufin.FindAction("R Ability", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -291,11 +322,61 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         }
     }
     public CharacterControlsActions @CharacterControls => new CharacterControlsActions(this);
+
+    // pitufin
+    private readonly InputActionMap m_pitufin;
+    private List<IPitufinActions> m_PitufinActionsCallbackInterfaces = new List<IPitufinActions>();
+    private readonly InputAction m_pitufin_RAbility;
+    public struct PitufinActions
+    {
+        private @PlayerInput m_Wrapper;
+        public PitufinActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @RAbility => m_Wrapper.m_pitufin_RAbility;
+        public InputActionMap Get() { return m_Wrapper.m_pitufin; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PitufinActions set) { return set.Get(); }
+        public void AddCallbacks(IPitufinActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PitufinActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PitufinActionsCallbackInterfaces.Add(instance);
+            @RAbility.started += instance.OnRAbility;
+            @RAbility.performed += instance.OnRAbility;
+            @RAbility.canceled += instance.OnRAbility;
+        }
+
+        private void UnregisterCallbacks(IPitufinActions instance)
+        {
+            @RAbility.started -= instance.OnRAbility;
+            @RAbility.performed -= instance.OnRAbility;
+            @RAbility.canceled -= instance.OnRAbility;
+        }
+
+        public void RemoveCallbacks(IPitufinActions instance)
+        {
+            if (m_Wrapper.m_PitufinActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPitufinActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PitufinActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PitufinActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PitufinActions @pitufin => new PitufinActions(this);
     public interface ICharacterControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnDodgeRoll(InputAction.CallbackContext context);
         void OnHit(InputAction.CallbackContext context);
+    }
+    public interface IPitufinActions
+    {
+        void OnRAbility(InputAction.CallbackContext context);
     }
 }
