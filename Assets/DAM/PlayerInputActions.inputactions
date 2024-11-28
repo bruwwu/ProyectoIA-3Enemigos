@@ -1,0 +1,34 @@
+{
+    "name": "PlayerInputActions",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "feb57f7d-4280-4eb0-a579-0980a18810a3",
+            "actions": [
+                {
+                    "name": "Disparar",
+                    "type": "Button",
+                    "id": "88e818ad-68a2-4d8c-bc3e-1ca6bfc5c4b5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0e4b6804-8d07-4228-9c73-2d7c01930efd",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Disparar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
