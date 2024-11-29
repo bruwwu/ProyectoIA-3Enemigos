@@ -145,15 +145,6 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Q Ability",
-                    "type": "Button",
-                    "id": "b14984bc-2f7c-4fa3-b3a4-0af181f63b2f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -165,17 +156,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "R Ability",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1f2c85e5-384d-44f1-80cd-3409add3d34d",
-                    "path": "<Keyboard>/q",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Q Ability",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
