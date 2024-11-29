@@ -167,6 +167,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Q Ability"",
+                    ""type"": ""Button"",
+                    ""id"": ""b14984bc-2f7c-4fa3-b3a4-0af181f63b2f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -178,6 +187,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""R Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f2c85e5-384d-44f1-80cd-3409add3d34d"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Q Ability"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -195,6 +215,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         // pitufin
         m_pitufin = asset.FindActionMap("pitufin", throwIfNotFound: true);
         m_pitufin_RAbility = m_pitufin.FindAction("R Ability", throwIfNotFound: true);
+        m_pitufin_QAbility = m_pitufin.FindAction("Q Ability", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -327,11 +348,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_pitufin;
     private List<IPitufinActions> m_PitufinActionsCallbackInterfaces = new List<IPitufinActions>();
     private readonly InputAction m_pitufin_RAbility;
+    private readonly InputAction m_pitufin_QAbility;
     public struct PitufinActions
     {
         private @PlayerInput m_Wrapper;
         public PitufinActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @RAbility => m_Wrapper.m_pitufin_RAbility;
+        public InputAction @QAbility => m_Wrapper.m_pitufin_QAbility;
         public InputActionMap Get() { return m_Wrapper.m_pitufin; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -344,6 +367,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @RAbility.started += instance.OnRAbility;
             @RAbility.performed += instance.OnRAbility;
             @RAbility.canceled += instance.OnRAbility;
+            @QAbility.started += instance.OnQAbility;
+            @QAbility.performed += instance.OnQAbility;
+            @QAbility.canceled += instance.OnQAbility;
         }
 
         private void UnregisterCallbacks(IPitufinActions instance)
@@ -351,6 +377,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @RAbility.started -= instance.OnRAbility;
             @RAbility.performed -= instance.OnRAbility;
             @RAbility.canceled -= instance.OnRAbility;
+            @QAbility.started -= instance.OnQAbility;
+            @QAbility.performed -= instance.OnQAbility;
+            @QAbility.canceled -= instance.OnQAbility;
         }
 
         public void RemoveCallbacks(IPitufinActions instance)
@@ -378,5 +407,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public interface IPitufinActions
     {
         void OnRAbility(InputAction.CallbackContext context);
+        void OnQAbility(InputAction.CallbackContext context);
     }
 }
