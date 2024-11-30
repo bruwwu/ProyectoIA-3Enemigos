@@ -138,9 +138,27 @@
             "id": "8a42279e-f8aa-4f1a-8d60-639f48fa9181",
             "actions": [
                 {
-                    "name": "R Ability",
+                    "name": "RAbility",
                     "type": "Button",
                     "id": "25bb4a82-9342-43ce-9508-3c164478ea72",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "QAbility",
+                    "type": "Button",
+                    "id": "917959bd-e36b-4a86-899d-7a76bc93910c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EAbility",
+                    "type": "Button",
+                    "id": "73e61aa6-69c9-43f6-8950-c43f28f9fac5",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press",
@@ -152,10 +170,32 @@
                     "name": "",
                     "id": "f12b1159-128e-40d2-9a79-b634af24f191",
                     "path": "<Keyboard>/r",
-                    "interactions": "Hold",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
-                    "action": "R Ability",
+                    "action": "RAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2aeaa801-1b26-4bfa-bdbc-8706c7f3d209",
+                    "path": "<Keyboard>/q",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92cfe57f-da11-4511-aa42-3eaa1350a058",
+                    "path": "<Keyboard>/e",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
