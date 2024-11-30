@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject UI;
+    public GameObject bossUI;
 
     public GameObject Scene;
 
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     public UnitHealthEnemy baseEnemyHealth = new UnitHealthEnemy(100, 100);
 
     public UnitHealthEnemy juanitoTorreta = new UnitHealthEnemy(60, 60);
+    public UnitHealthEnemy NaomiBossMiViejaWe = new UnitHealthEnemy(500, 500);
     public UnitHealthEnemy bruwuFem = new UnitHealthEnemy(40, 40);
 
     void Awake()

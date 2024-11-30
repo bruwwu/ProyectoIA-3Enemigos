@@ -14,7 +14,6 @@ public class NavMeshBoss : MonoBehaviour
     public Transform player;
 
     private bool isDetected = false; 
-    [SerializeField] HB_Slider hB_Slider;
     public GameObject playerGameObject; 
     public float detectedSphereRadious;
     public float jumpSphereRadious; 
@@ -27,8 +26,8 @@ public class NavMeshBoss : MonoBehaviour
     public float maxAcceleration = 5f; 
 
     [Header("Shooting - Sistema de Disparo")]
-    public GameObject Mira; 
-    public GameObject BalaPrefabInicio; 
+    //public GameObject Mira; 
+    //public GameObject BalaPrefabInicio; 
     public float BalaVelocidad; 
 
     [Header("Behavior - Estado y Comportamiento")]
@@ -157,18 +156,6 @@ public class NavMeshBoss : MonoBehaviour
         isJumping = true;
     }
 
-    public void OnTriggerEnter(Collider collision)
-    {
-        // Si colisiona con el jugador, aplicar daño basado en la velocidad
-        if (collision.gameObject.tag == "Player")
-        {
-            // Asegúrate de que GameManager y playerHealth están correctamente configurados
-            GameManager.gameManager.playerHealth.VelDmgUnit(2, velocityMagnitude);
-            hB_Slider.SetHealth(GameManager.gameManager.playerHealth.Health);
-            Debug.Log(GameManager.gameManager.playerHealth.Health);
-        }
-    }
-
     IEnumerator lockIn() //Corrutina para fijar al player
     {
         while (!isDetected)  // Mientras el jugador esté dentro del rango de visión
@@ -177,13 +164,13 @@ public class NavMeshBoss : MonoBehaviour
             Vector3 relativePos = player.position - Enemy.position;
             Quaternion toRotation = Quaternion.LookRotation(relativePos);
             Enemy.rotation = Quaternion.Slerp(Enemy.rotation, toRotation, Time.deltaTime * 5f);
-            yonBombing();
+            //yonBombing();
             yield return null; // Continuar cada frame
         }
         yield return new WaitForSeconds(2f);
     }
 
-    void yonBombing() //Disparo
+    /*void yonBombing() //Disparo
     {
         if(!block){
             GameObject Balatemporal = Instantiate(Mira, BalaPrefabInicio.transform.position, BalaPrefabInicio.transform.rotation) as GameObject;
@@ -194,12 +181,7 @@ public class NavMeshBoss : MonoBehaviour
             Destroy(Balatemporal, 1f);
             StartCoroutine(WaitFor());
         }
-    }
-
-    Vector3 PredictPos(Vector3 InitiaPos, Vector3 Velocity, float TimePrediction)
-    {
-        return InitiaPos + Velocity * TimePrediction; // Retorna la posición futura
-    }
+    }*/
     IEnumerator WaitFor()
     {
         block = true;

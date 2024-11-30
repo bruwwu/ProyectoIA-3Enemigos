@@ -15,6 +15,7 @@ TagManager:
   - Zona 3
   - Zona 4
   - Zona 5
+  - Boss
   layers:
   - Default
   - TransparentFX
