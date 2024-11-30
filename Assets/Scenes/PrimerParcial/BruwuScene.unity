@@ -587,7 +587,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22afdc6a1f782a44294b2d9254377922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BalaPrefabInicio: {fileID: 0}
+  BalaPrefabInicio: {fileID: 6168815471499756148, guid: e97ea54ba32d07148816c90597ee70b8,
+    type: 3}
   Mira: {fileID: 859516918}
   BalaVelocidad: 400
 --- !u!23 &859516921
@@ -1002,6 +1003,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 10
   rotationSensitivity: 210
+  cameraSystem: {fileID: 0}
+  gravity: -9.81
 --- !u!143 &1524805371
 CharacterController:
   m_ObjectHideFlags: 0

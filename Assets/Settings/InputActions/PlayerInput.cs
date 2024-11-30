@@ -154,6 +154,74 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""pitufin"",
+            ""id"": ""8a42279e-f8aa-4f1a-8d60-639f48fa9181"",
+            ""actions"": [
+                {
+                    ""name"": ""RAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""25bb4a82-9342-43ce-9508-3c164478ea72"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""QAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""917959bd-e36b-4a86-899d-7a76bc93910c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""73e61aa6-69c9-43f6-8950-c43f28f9fac5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f12b1159-128e-40d2-9a79-b634af24f191"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2aeaa801-1b26-4bfa-bdbc-8706c7f3d209"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92cfe57f-da11-4511-aa42-3eaa1350a058"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -164,6 +232,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_CharacterControls_Run = m_CharacterControls.FindAction("Run", throwIfNotFound: true);
         m_CharacterControls_DodgeRoll = m_CharacterControls.FindAction("Dodge Roll", throwIfNotFound: true);
         m_CharacterControls_Hit = m_CharacterControls.FindAction("Hit", throwIfNotFound: true);
+        // pitufin
+        m_pitufin = asset.FindActionMap("pitufin", throwIfNotFound: true);
+        m_pitufin_RAbility = m_pitufin.FindAction("RAbility", throwIfNotFound: true);
+        m_pitufin_QAbility = m_pitufin.FindAction("QAbility", throwIfNotFound: true);
+        m_pitufin_EAbility = m_pitufin.FindAction("EAbility", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -291,11 +364,79 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         }
     }
     public CharacterControlsActions @CharacterControls => new CharacterControlsActions(this);
+
+    // pitufin
+    private readonly InputActionMap m_pitufin;
+    private List<IPitufinActions> m_PitufinActionsCallbackInterfaces = new List<IPitufinActions>();
+    private readonly InputAction m_pitufin_RAbility;
+    private readonly InputAction m_pitufin_QAbility;
+    private readonly InputAction m_pitufin_EAbility;
+    public struct PitufinActions
+    {
+        private @PlayerInput m_Wrapper;
+        public PitufinActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @RAbility => m_Wrapper.m_pitufin_RAbility;
+        public InputAction @QAbility => m_Wrapper.m_pitufin_QAbility;
+        public InputAction @EAbility => m_Wrapper.m_pitufin_EAbility;
+        public InputActionMap Get() { return m_Wrapper.m_pitufin; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PitufinActions set) { return set.Get(); }
+        public void AddCallbacks(IPitufinActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PitufinActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PitufinActionsCallbackInterfaces.Add(instance);
+            @RAbility.started += instance.OnRAbility;
+            @RAbility.performed += instance.OnRAbility;
+            @RAbility.canceled += instance.OnRAbility;
+            @QAbility.started += instance.OnQAbility;
+            @QAbility.performed += instance.OnQAbility;
+            @QAbility.canceled += instance.OnQAbility;
+            @EAbility.started += instance.OnEAbility;
+            @EAbility.performed += instance.OnEAbility;
+            @EAbility.canceled += instance.OnEAbility;
+        }
+
+        private void UnregisterCallbacks(IPitufinActions instance)
+        {
+            @RAbility.started -= instance.OnRAbility;
+            @RAbility.performed -= instance.OnRAbility;
+            @RAbility.canceled -= instance.OnRAbility;
+            @QAbility.started -= instance.OnQAbility;
+            @QAbility.performed -= instance.OnQAbility;
+            @QAbility.canceled -= instance.OnQAbility;
+            @EAbility.started -= instance.OnEAbility;
+            @EAbility.performed -= instance.OnEAbility;
+            @EAbility.canceled -= instance.OnEAbility;
+        }
+
+        public void RemoveCallbacks(IPitufinActions instance)
+        {
+            if (m_Wrapper.m_PitufinActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPitufinActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PitufinActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PitufinActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PitufinActions @pitufin => new PitufinActions(this);
     public interface ICharacterControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnDodgeRoll(InputAction.CallbackContext context);
         void OnHit(InputAction.CallbackContext context);
+    }
+    public interface IPitufinActions
+    {
+        void OnRAbility(InputAction.CallbackContext context);
+        void OnQAbility(InputAction.CallbackContext context);
+        void OnEAbility(InputAction.CallbackContext context);
     }
 }

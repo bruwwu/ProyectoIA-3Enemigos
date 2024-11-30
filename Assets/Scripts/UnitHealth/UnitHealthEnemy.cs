@@ -41,6 +41,16 @@ public class UnitHealthEnemy
     //metodos
 
     //Metodo para recibir daño
+    public void TickDmgUnit(float dmgAmount)
+    {
+        if (currentHealth > 0)
+        {
+            currentHealth -= (int)dmgAmount;
+            if(currentHealth <= 0){
+                currentHealth = 0;
+            }
+        }
+    }
     public void DmgUnit(int dmgAmount)
     {
         if (currentHealth > 0)
@@ -50,7 +60,7 @@ public class UnitHealthEnemy
                 currentHealth = 0;
             }
         }
-    }
+    
 
   
 
@@ -68,4 +78,5 @@ public class UnitHealthEnemy
         }
 
     }*/
+    }
 }
