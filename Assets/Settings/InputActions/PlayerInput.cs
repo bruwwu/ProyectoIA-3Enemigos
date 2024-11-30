@@ -146,7 +146,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""2c26496b-6f94-4473-bf09-14c205d900c0"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press(pressPoint=1)"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Hit"",
