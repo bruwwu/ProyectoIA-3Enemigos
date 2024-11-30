@@ -5,33 +5,79 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    PlayerInput playerInput;
-    CharacterController characterController;
+    public PlayerInput playerInput;
+    public CharacterController characterController;
 
-    Animator animator;
+    public Animator animator;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 currentRunMovement;
-    bool isMovementPressed;
+    Vector3 currentDodgeMovement;
+    Vector3 currentHitMovement;
+    bool _isMovementPressed;
     bool isRunPressed;
+    bool _isDodgeTap;
+    bool isAttacking;
     public float rotationFPS = 1.0f;
     public float walkingVelocity;
-    public float runningVelocity;
     public float groundGravity = -0.05f;
     public float Gravity = -9.8f;
+    public float dashSpeed = 1;
+    float _speed = 0f;
 
-    public float dashSpeed;
+    float timePassed;
+    float clipLength;
 
-    public float dashTime;
+    float clipSpeed;
+
+    bool attack;
+
+    bool isDashing;
+
+    bool dodgeBlock;
 
     PlayerBaseState _currentState;
+    PlayerStateFactory _states;
 
+    public PlayerBaseState CurrentState{ get {return _currentState;} set {_currentState = value;}}
+    public Animator Animator {get{return animator;}}
+    public bool isMovementPressed { get {return _isMovementPressed;}}
+    public bool isDodgeTap{get {return _isDodgeTap;} set{_isDodgeTap = value;}}
+    public bool _AttackAction{get{return isAttacking;} set{isAttacking = value;}}
+
+    public float speed {get {return _speed;} set {_speed = value;}}
+
+    public float AppliedMovementX {get {return currentMovement.x;} set{currentMovement.x = value;}}
+    public float AppliedMovementZ {get {return currentMovement.z;} set{currentMovement.z = value;}}
+    public float currentDodgeMovementX {get {return currentDodgeMovement.x;} set{currentDodgeMovement.x = value;}}
+
+    public float currentDodgeMovementZ {get {return currentDodgeMovement.z;} set{currentDodgeMovement.z = value;}}
+
+    public float walkingMultiplier {get {return walkingVelocity;}}
+
+    public Vector2 CurrentMovementInput {get {return currentMovementInput;}}
+
+    public float GroundedGravity {get {return groundGravity;}}
+
+    public float CurrentMovementY {get {return currentMovement.y;} set {currentMovement.y = value;}}
+    public float CurrentDodgeMovementY {get {return currentDodgeMovement.y;} set {currentDodgeMovement.y = value;}}
+
+    public float _TimePassed {get{return timePassed;} set{timePassed = value;}}
+    public float _ClipLength {get {return clipLength;} set{clipLength = value;}}
+    public float _ClipSpeed {get{return clipSpeed;} set{clipSpeed = value;}}
+    public bool _Attack{get{return attack;} set{attack = value;}}
+
+    public bool _DodgeBlock{get{return dodgeBlock;} set{dodgeBlock = value;}}
     void Awake()
     {
         playerInput = new PlayerInput();
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        _states = new PlayerStateFactory(this);
+        _currentState = _states.Grounded();
+        _currentState.EnterState();
 
 
         playerInput.CharacterControls.Move.started += onMovementInput;
@@ -40,37 +86,36 @@ public class PlayerStateMachine : MonoBehaviour
 
         playerInput.CharacterControls.Move.performed += onMovementInput;
 
-        playerInput.CharacterControls.Run.started += OnRun;
+        playerInput.CharacterControls.DodgeRoll.performed += OnDodge;
 
-        playerInput.CharacterControls.Run.canceled += OnRun;
+        playerInput.CharacterControls.DodgeRoll.canceled += OnDodge;
+
+        playerInput.CharacterControls.Hit.started += onAttack;
+
+        playerInput.CharacterControls.Hit.canceled += onAttack;
     }
 
-    void OnRun (InputAction.CallbackContext context)
+    void OnDodge (InputAction.CallbackContext context)
     {
-        isRunPressed = context.ReadValueAsButton();
+        _isDodgeTap = context.ReadValueAsButton();
 
     }
+
+    void onAttack (InputAction.CallbackContext context)
+    {
+        isAttacking = context.ReadValueAsButton();
+
+    }
+
 
     void onMovementInput (InputAction.CallbackContext context)
     {
         currentMovementInput = context.ReadValue<Vector2>();
-        currentMovement.x = currentMovementInput.x * walkingVelocity;
-        currentMovement.z = currentMovementInput.y * walkingVelocity;
-        currentRunMovement.x = currentMovementInput.x * runningVelocity;
-        currentRunMovement.z = currentMovementInput.y * runningVelocity;
-        isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
+
+        _isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
 
     }
 
-     void OnEnable()
-    {
-        playerInput.CharacterControls.Enable();
-    }
-
-    void OnDisable()
-    {
-        playerInput.CharacterControls.Disable();
-    }
     void handleRotation()
     {
         Vector3 positionToLookAt;
@@ -87,9 +132,49 @@ public class PlayerStateMachine : MonoBehaviour
         
 
     }
+    IEnumerator Dash()
+    {
+        _isDodgeTap = false;
+        dodgeBlock = true;
+        characterController.Move(currentDodgeMovement * dashSpeed * Time.deltaTime);
+        yield return new WaitForSeconds(2f);
+        dodgeBlock = false;
+    }
 
     void Update()
     {
+        if (_currentState == null) { 
+            Debug.LogError("_currentState is not set!"); 
+            return; 
+            } 
+            if (characterController == null) { 
+                Debug.LogError("characterController is not set!"); 
+                return;
+            }
         handleRotation();
+        _currentState.UpdateStates();
+        if(_isDodgeTap && !dodgeBlock)
+        {
+            StartCoroutine(Dash());
+        }
+        else if(isAttacking)
+        {
+            attack = true;
+        }
+        else
+        {
+            characterController.Move(currentMovement * Time.deltaTime);
+        }
+    }
+    
+
+    void OnEnable()
+    {
+        playerInput.CharacterControls.Enable();
+    }
+
+    void OnDisable()
+    {
+        playerInput.CharacterControls.Disable();
     }
 }

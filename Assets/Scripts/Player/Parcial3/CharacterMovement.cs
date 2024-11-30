@@ -5,10 +5,10 @@ using UnityEngine.InputSystem;
 
 public class CharacterMovement : MonoBehaviour
 {
-    PlayerInput playerInput;
-    CharacterController characterController;
+    public PlayerInput playerInput;
+    public CharacterController characterController;
 
-    Animator animator;
+    public Animator animator;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -20,10 +20,10 @@ public class CharacterMovement : MonoBehaviour
     bool isDodgeTap;
     public float rotationFPS = 1.0f;
     public float walkingVelocity;
-    public float runningVelocity;
     public float groundGravity = -0.05f;
     public float Gravity = -9.8f;
     public float dashSpeed = 1;
+    bool isDashing;
     
     // Start is called before the first frame update
     void Awake()
@@ -39,11 +39,7 @@ public class CharacterMovement : MonoBehaviour
 
         playerInput.CharacterControls.Move.performed += onMovementInput;
 
-        playerInput.CharacterControls.Run.started += OnRun;
-
-        playerInput.CharacterControls.Run.canceled += OnRun;
-
-        playerInput.CharacterControls.DodgeRoll.started += OnDodge;
+        playerInput.CharacterControls.DodgeRoll.performed += OnDodge;
 
         playerInput.CharacterControls.DodgeRoll.canceled += OnDodge;
     }
@@ -55,20 +51,12 @@ public class CharacterMovement : MonoBehaviour
     }
 
 
-    void OnRun (InputAction.CallbackContext context)
-    {
-        isRunPressed = context.ReadValueAsButton();
-
-    }
 
     void onMovementInput (InputAction.CallbackContext context)
     {
         currentMovementInput = context.ReadValue<Vector2>();
         currentMovement.x = currentMovementInput.x * walkingVelocity;
         currentMovement.z = currentMovementInput.y * walkingVelocity;
-
-        currentRunMovement.x = currentMovementInput.x * runningVelocity;
-        currentRunMovement.z = currentMovementInput.y * runningVelocity;
 
         currentDodgeMovement.x = currentMovementInput.x;
         currentDodgeMovement.z = currentMovementInput.y;
@@ -96,33 +84,27 @@ public class CharacterMovement : MonoBehaviour
 
     void handleAnimation()
     {
-        bool isWalking = animator.GetBool("isWalking");
-        bool isRunning = animator.GetBool("isRunning");
-        bool isDodging = animator.GetBool("isDodging");
+        float speed = 0f; // Inicializa la velocidad en 0
 
-        if(isMovementPressed && !isWalking){
-            animator.SetBool("isWalking", true);
-        }
-        else if(!isMovementPressed && isWalking) {
-            animator.SetBool("isWalking", false);
+        // Verifica si hay movimiento
+        if (isMovementPressed)
+        {
+            speed = 0.5f;
+            animator.SetTrigger("move"); // 1 para correr, 0.5 para caminar
         }
 
-        if ((isMovementPressed && isRunPressed) && !isRunning){
-            animator.SetBool("isRunning", true);
+        // Establece el valor de speed en el animator
+        
+        // Maneja el dodge
+        if (isDodgeTap && isMovementPressed)
+        {   
+            animator.SetTrigger("Dodge"); 
+            speed = 1.0f;
+            // Usa un trigger para el dodge
+            //StartCoroutine(Dash());
         }
-        else if ((!isMovementPressed || !isRunPressed) && isRunning){
-            animator.SetBool("isRunning", false);
-        }
-
-        if ((isMovementPressed && isDodgeTap) && !isDodging){
-            animator.SetBool("isDodging", true);
-        }
-        else if ((!isMovementPressed || !isDodgeTap) && isDodging){
-            animator.SetBool("isDodging", false);
-        }
-        else if ((!isMovementPressed || isDodgeTap) && isDodging){
-            animator.SetBool("isDodging", true);
-        }
+        
+        animator.SetFloat("speed", speed);
     }
 
     bool AnimatorInState(string stateName)
@@ -152,50 +134,23 @@ public class CharacterMovement : MonoBehaviour
         handleGravity();
         handleAnimation();
         handleRotation();
-        if(isRunPressed)
+        if(isDodgeTap)
         {
-            characterController.Move(currentRunMovement * Time.deltaTime);
-            /*if(isDodgeTap)
-            {
-                
-            }*/
-            if(isDodgeTap && isRunPressed)
-            {
-                StartCoroutine(Dash());
-            }
-        }
-        else if(isDodgeTap && isMovementPressed)
-        {
-            
             StartCoroutine(Dash());
-            //characterController.Move(currentDodgeMovement * dashSpeed * Time.deltaTime);
-            
         }
-    
         else
         {
             characterController.Move(currentMovement * Time.deltaTime);
         }
+        
 
     }
 
     IEnumerator Dash()
     {
-         //bool isButtonPressed = playerInput.CharacterControls.Run.ReadValue<float>() > 0;
-
-        playerInput.CharacterControls.Run.Disable();
+        isDodgeTap = false;
         characterController.Move(currentDodgeMovement * dashSpeed * Time.deltaTime);
-        yield return new WaitForSeconds(0.5f);
-        playerInput.CharacterControls.DodgeRoll.Disable();
-        yield return new WaitForSeconds(0.5f);
-        playerInput.CharacterControls.Run.Enable();
-        /*if(isButtonPressed)
-        {
-            isRunPressed = true;
-        }*/
-
         yield return new WaitForSeconds(2f);
-        playerInput.CharacterControls.DodgeRoll.Enable();
     }
 
     void OnEnable()
