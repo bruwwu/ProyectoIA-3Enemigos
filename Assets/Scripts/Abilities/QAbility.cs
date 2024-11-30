@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class QAbility : MonoBehaviour
 {
+    
+    public HB_Slider bossHB_Slider;
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Boss")){
         Debug.Log("Q Hit!");
         GameManager.gameManager.NaomiBossMiViejaWe.DmgUnit(10);
+        bossHB_Slider.SetHealth(GameManager.gameManager.NaomiBossMiViejaWe.Health);
         Debug.Log(GameManager.gameManager.NaomiBossMiViejaWe.Health);
         if(GameManager.gameManager.NaomiBossMiViejaWe.Health == 0)
             {

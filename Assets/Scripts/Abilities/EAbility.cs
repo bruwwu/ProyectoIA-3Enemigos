@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EAbility : MonoBehaviour
 {
+    public HB_Slider bossHB_Slider;
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Boss")){
         Debug.Log("Q Hit!");
         GameManager.gameManager.NaomiBossMiViejaWe.DmgUnit(20);
+        bossHB_Slider.SetHealth(GameManager.gameManager.NaomiBossMiViejaWe.Health);
         Debug.Log(GameManager.gameManager.NaomiBossMiViejaWe.Health);
         if(GameManager.gameManager.NaomiBossMiViejaWe.Health == 0)
             {
