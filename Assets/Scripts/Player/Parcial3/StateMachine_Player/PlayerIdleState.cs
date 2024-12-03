@@ -7,7 +7,6 @@ public class PlayerIdleState : PlayerBaseState
     public PlayerIdleState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     : base (currentContext, playerStateFactory) {}
     public override void EnterState(){
-        Debug.Log("Entering Idle State");
         Ctx.speed = 0.0f;
         Ctx.animator.SetTrigger("move");
         Ctx.animator.SetFloat("speed", Ctx.speed);

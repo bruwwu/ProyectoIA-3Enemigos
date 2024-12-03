@@ -14,7 +14,7 @@ public class BulletEnemy : MonoBehaviour
             Debug.Log("Me follan");
             
             // Aplicar daño al jugador
-            GameManager.gameManager.playerHealth.DmgUnit(15, GameManager.gameManager.UI, GameManager.gameManager.Scene);
+            GameManager.gameManager.playerHealth.DmgUnit(15);
             
 
             // Actualizar la barra de salud con el valor actual de la salud

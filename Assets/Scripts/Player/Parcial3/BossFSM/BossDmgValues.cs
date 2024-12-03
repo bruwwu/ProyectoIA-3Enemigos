@@ -6,7 +6,8 @@ public class BossDmgValues : MonoBehaviour
 {
     public HB_Slider hB_Slider;
     public int velocityMagnitude;
-   public void OnTriggerEnter(Collider collision)
+
+    public void OnTriggerEnter(Collider collision)
     {
         // Si colisiona con el jugador, aplicar daño basado en la velocidad
         if (collision.gameObject.tag == "Player")
@@ -21,5 +22,12 @@ public class BossDmgValues : MonoBehaviour
     {
         GameManager.gameManager.NaomiBossMiViejaWe.DmgUnit(dmg);
         Debug.Log("poqe me pegas si yo te amO Fang");
+    }
+
+     public void ApplyWipeDamage(int wipeDamage)
+    {
+        GameManager.gameManager.playerHealth.DmgUnit(wipeDamage);
+        hB_Slider.SetHealth(GameManager.gameManager.playerHealth.Health);
+        Debug.Log("Wipe ejecutado, daño aplicado.");
     }
 }

@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class activationPlaceholder : MonoBehaviour
 {
+    [Header("EnemyTemporizer")]
+    public BossFSM bossFSM;
+    public TMP_Text finalBattleTempo;
     [Header("Componentes/UI")]
     public PlayerInput pitufin; 
     //Q
@@ -57,8 +60,14 @@ public class activationPlaceholder : MonoBehaviour
         pitufin.pitufin.EAbility.performed += OnECast;
     }
 
+    void Start()
+    {
+        StartCoroutine(temporizadorFinal());
+    }
+
     void Update()
     {
+        
     }
     //BLOQUE DE HABILIDAD R
     void RActivation()
@@ -70,6 +79,20 @@ public class activationPlaceholder : MonoBehaviour
         RImage.color = new Color(1, 1, 1, 0.5f);
 
         StartCoroutine(RIniciarDuracion());
+    }
+
+    //Temporizador de la batalla final, gg papu :v
+    IEnumerator temporizadorFinal()
+    {
+        float tiempoRestante = bossFSM.wipeTemporizer;
+
+        while (tiempoRestante > 0)
+        {
+            finalBattleTempo.text = Mathf.CeilToInt(tiempoRestante).ToString();
+            tiempoRestante--;
+            yield return new WaitForSeconds(1f);
+        }
+        finalBattleTempo.text = "gg papuh :v";
     }
 
 
