@@ -23,11 +23,7 @@ public class BossJumpState : BossBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        // Verificar si el salto ha terminado
-        if (!boss.isJumping)
-        {
-            CheckSwitchStates();
-        }
+        boss.navMeshAgent.SetDestination(boss.player.position);
     }
 
     public override void ExitState(){}

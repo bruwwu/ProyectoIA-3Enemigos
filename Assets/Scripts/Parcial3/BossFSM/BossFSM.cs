@@ -17,9 +17,11 @@ public class BossFSM : MonoBehaviour
     public float speed;
     public float jumpForce;
     public float jumpCooldown;
-    public bool isJumping = true;
+    public bool isJumping;
     public NavMeshAgent navMeshAgent;
     public Animator naomiAni;
+
+    [Header("Melee")]
 
     /*
     [Header("Ataque Especial")]
@@ -45,7 +47,7 @@ public class BossFSM : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         naomiAni = GetComponent<Animator>();
         stateFactory = new BossStateFactory(this);
-
+        isJumping = false;
         // Inicializa en el estado Idle
         SwitchState(stateFactory.Idle());
         StartCoroutine(IniciarTempo());
@@ -84,30 +86,26 @@ public class BossFSM : MonoBehaviour
         if (!isJumping) return;
 
         Debug.Log("Realizando salto hacia el jugador.");
-
-        Vector3 direction = (player.position - transform.position).normalized;
-
+        detectedSphereRadious /= 10;
         rb.velocity = Vector3.zero;
-
-        // Aplicar fuerza de salto hacia el jugador
+        // Calcular dirección y aplicar fuerza de salto
+        navMeshAgent.SetDestination(player.position);
+        Vector3 direction = (player.position - transform.position).normalized;
         rb.AddForce(direction * jumpForce, ForceMode.Impulse);
+        
 
-        // Iniciar cooldown del salto
+        // Deshabilitar salto hasta que termine el cooldown
         StartCoroutine(JumpCooldown());
     }
 
     IEnumerator JumpCooldown()
     {
-        // Deshabilitar temporalmente el salto
-        isJumping = false;
-
-        // Esperar la duración del cooldown
+        // Restaurar el rango de detección original
+        
+        rb.velocity = Vector3.zero;
         yield return new WaitForSeconds(jumpCooldown);
-
-        // Rehabilitar el salto
-        isJumping = true;
-
-        Debug.Log("Salto listo nuevamente.");
+        detectedSphereRadious *= 10;
+        isJumping = false;
     }
 
     IEnumerator IniciarTempo()

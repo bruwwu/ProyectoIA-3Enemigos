@@ -1,11 +1,16 @@
+
+
+using UnityEngine;
+
 public class BossChaseState : BossBaseState
 {
     public BossChaseState(BossFSM boss, BossStateFactory stateFactory) : base(boss, stateFactory) { }
 
     public override void EnterState()
     {
-        // Inicia el movimiento hacia el jugador
-        boss.navMeshAgent.isStopped = false;
+        boss.rb.velocity = Vector3.zero;
+        
+
         if (boss.naomiAni != null)
         {
             boss.naomiAni.SetTrigger("Walking");
@@ -19,29 +24,30 @@ public class BossChaseState : BossBaseState
     CheckSwitchStates();
     // Establecer el destino al jugador
     boss.navMeshAgent.SetDestination(boss.player.position);
-
-    // Cambiar al estado Jump si el jugador está en rango de salto
-    if (!boss.IsPlayerInRange(boss.detectedSphereRadious) && boss.IsPlayerInRange(boss.jumpSphereRadious) && boss.isJumping)
-    {
-        boss.SwitchState(Factory.Jump());
-    }
+    
 }
 
 
     public override void ExitState(){}
 
-    public override void CheckSwitchStates()
+   public override void CheckSwitchStates()
     {
-        // Validar las transiciones según condiciones adicionales si las hay
-        if (!boss.IsPlayerInRange(boss.detectedSphereRadious))
-        {
-           // boss.SwitchState(Factory.MeteorCast());
-        }
-        else if (!boss.IsPlayerInRange(boss.jumpSphereRadious))
+        // Priorizar volver a Idle si está fuera de ambos rangos
+        if (!boss.IsPlayerInRange(boss.jumpSphereRadious))
         {
             boss.SwitchState(Factory.Idle());
         }
+        else if (boss.IsPlayerInRange(boss.jumpSphereRadious) && boss.isJumping)
+        {
+            boss.SwitchState(Factory.Jump());
+        }
+        else if (boss.IsPlayerInRange(boss.detectedSphereRadious))
+        {
+            boss.SwitchState(Factory.Chase());
+        }
     }
+
+
 
     public override void InitializeSubState()
     {
