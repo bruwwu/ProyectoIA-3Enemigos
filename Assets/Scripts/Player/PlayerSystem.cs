@@ -87,7 +87,7 @@ public class PlayerSystem : MonoBehaviour
 
     private void PlayerTakeDmg(int dmg)
     {
-        GameManager.gameManager.playerHealth.DmgUnit(dmg, GameManager.gameManager.UI, GameManager.gameManager.Scene);
+        GameManager.gameManager.playerHealth.DmgUnit(dmg);
         Debug.Log("Awaaaa soy el personaje principal y me hicieron daño unu");
     }
 }

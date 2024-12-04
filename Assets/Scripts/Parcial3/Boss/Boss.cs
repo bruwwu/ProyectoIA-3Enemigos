@@ -55,6 +55,7 @@ public class NavMeshBoss : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();  
     }
 
+
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(playerGameObject.transform.position, transform.position);
@@ -80,12 +81,8 @@ public class NavMeshBoss : MonoBehaviour
         else if (distanceToPlayer > detectedSphereRadious && distanceToPlayer <= jumpSphereRadious)
         {
             // Realizar un salto hacia el jugador si está en rango de salto y no está en cooldown
-            if (isJumping)
-            {
-        
-                Debug.Log("Jugador en rango de salto. Ejecutando DoJump()");
-                DoJump();
-            }
+            Debug.Log("Jugador en rango de salto. Ejecutando DoJump()");
+            DoJump();
         }
         else
         {
@@ -188,4 +185,6 @@ public class NavMeshBoss : MonoBehaviour
         yield return new WaitForSeconds(5f);
         block = false;
     }
+
+
 }

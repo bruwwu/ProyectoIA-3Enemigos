@@ -10,7 +10,7 @@ public class PlayerWalkingState : PlayerBaseState
         Ctx.speed = 0.5f;
         Ctx.animator.SetTrigger("move");
         Ctx.animator.SetFloat("speed", Ctx.speed);
-        Debug.Log("AHHHH ESTAMOS EN WALKING");
+        
     }
 
     public override void UpdateState(){

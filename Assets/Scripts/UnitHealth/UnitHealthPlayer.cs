@@ -40,16 +40,11 @@ public class UnitHealthPlayer
     //metodos
 
     //Metodo para recibir daño
-    public void DmgUnit(int dmgAmount, GameObject ui, GameObject scene)
+    public void DmgUnit(int dmgAmount)
     {
         if (currentHealth > 0)
         {
             currentHealth -= dmgAmount;
-        }
-        else if (currentHealth <= 0)
-        {
-            scene.SetActive(false);
-            ui.SetActive(true);
         }
 
     }
