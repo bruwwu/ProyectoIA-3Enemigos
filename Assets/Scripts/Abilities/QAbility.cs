@@ -20,6 +20,16 @@ public class QAbility : MonoBehaviour
                 other.gameObject.transform.position = newPosition;
                 Destroy(other.gameObject, 0.6f);
             }
+        } else if(other.gameObject.CompareTag("Enemy")){
+            Debug.Log("Q Hit!");
+            GameManager.gameManager.juanSquishi.DmgUnit(10);
+            if(GameManager.gameManager.juanSquishi.Health == 0)
+                {
+                    Debug.Log("darkheavy skibidi ded");
+                    Vector3 newPosition = new Vector3(other.gameObject.transform.position.x, 60.0f, other.gameObject.transform.position.z);
+                    other.gameObject.transform.position = newPosition;
+                    Destroy(other.gameObject, 0.6f);
+                }
         }
         
     }

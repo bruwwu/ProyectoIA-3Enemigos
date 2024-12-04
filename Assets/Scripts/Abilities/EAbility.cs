@@ -10,7 +10,7 @@ public class EAbility : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Boss")){
         Debug.Log("Q Hit!");
-        GameManager.gameManager.NaomiBossMiViejaWe.DmgUnit(20);
+        GameManager.gameManager.NaomiBossMiViejaWe.DmgUnit(6);
         bossHB_Slider.SetHealth(GameManager.gameManager.NaomiBossMiViejaWe.Health);
         Debug.Log(GameManager.gameManager.NaomiBossMiViejaWe.Health);
         if(GameManager.gameManager.NaomiBossMiViejaWe.Health == 0)

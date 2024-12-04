@@ -27,12 +27,12 @@ public class FramesLimits : MonoBehaviour
 
         if (player.isAttacking == true)
         {
-            Debug.Log("Estas en attack");
+            
             choppyRate = 400.0f;
         }
         else
         {
-            Debug.Log("NOOOOOOOOOOO Estas en attack");
+            
             choppyRate = 0.1f;
         }
     }
