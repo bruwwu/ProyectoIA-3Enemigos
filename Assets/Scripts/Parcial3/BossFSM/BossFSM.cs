@@ -22,7 +22,7 @@ public class BossFSM : MonoBehaviour
     public Animator naomiAni;
 
     [Header("Melee")]
-
+    public float areaDmg;
     /*
     [Header("Ataque Especial")]
     public GameObject meteorPrefab;
