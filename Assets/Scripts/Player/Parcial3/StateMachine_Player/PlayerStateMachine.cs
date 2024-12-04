@@ -15,10 +15,12 @@ public class PlayerStateMachine : MonoBehaviour
     Vector3 currentRunMovement;
     Vector3 currentDodgeMovement;
     Vector3 currentHitMovement;
+    Vector3 _cameraRelativeMovement;
+    bool Attackwait;
     bool _isMovementPressed;
     bool isRunPressed;
     bool _isDodgeTap;
-    bool isAttacking;
+    public bool isAttacking;
     public float rotationFPS = 1.0f;
     public float walkingVelocity;
     public float groundGravity = -0.05f;
@@ -35,7 +37,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     bool isDashing;
 
-    bool dodgeBlock;
+    public bool dodgeBlock;
 
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
@@ -119,9 +121,9 @@ public class PlayerStateMachine : MonoBehaviour
     void handleRotation()
     {
         Vector3 positionToLookAt;
-        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.x = _cameraRelativeMovement.x;
         positionToLookAt.y = 0.0f;
-        positionToLookAt.z = currentMovement.z;
+        positionToLookAt.z = _cameraRelativeMovement.z;
 
 
         Quaternion currentRotation = transform.rotation;
@@ -136,9 +138,18 @@ public class PlayerStateMachine : MonoBehaviour
     {
         _isDodgeTap = false;
         dodgeBlock = true;
-        characterController.Move(currentDodgeMovement * dashSpeed * Time.deltaTime);
-        yield return new WaitForSeconds(2f);
+        characterController.Move(_cameraRelativeMovement * ( walkingVelocity * dashSpeed ) * Time.deltaTime);
+        StartCoroutine(DashBoost());
+        yield return new WaitForSeconds(1.5f);
         dodgeBlock = false;
+    }
+
+    IEnumerator DashBoost()
+    {
+        float restoreChilito = walkingVelocity;
+        walkingVelocity = walkingVelocity + 1.8f;
+        yield return new WaitForSeconds(1.0f);
+        walkingVelocity = restoreChilito;
     }
 
     void Update()
@@ -151,20 +162,42 @@ public class PlayerStateMachine : MonoBehaviour
                 Debug.LogError("characterController is not set!"); 
                 return;
             }
+
+            _cameraRelativeMovement = ConverToCameraSpace(currentMovement);
         handleRotation();
         _currentState.UpdateStates();
         if(_isDodgeTap && !dodgeBlock)
         {
             StartCoroutine(Dash());
         }
-        else if(isAttacking)
+        else if(isAttacking && !Attackwait)
         {
             attack = true;
         }
         else
         {
-            characterController.Move(currentMovement * Time.deltaTime);
+            characterController.Move(_cameraRelativeMovement * walkingVelocity * Time.deltaTime);
         }
+    }
+
+    Vector3 ConverToCameraSpace(Vector3 vectorToRotate)
+    {
+        float currentYValue = vectorToRotate.y;
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+
+        cameraForward = cameraForward.normalized;
+        cameraRight = cameraRight.normalized;
+
+        Vector3 cameraForwardZProduct = vectorToRotate.z * cameraForward;
+        Vector3 cameraRightXProduct = vectorToRotate.x * cameraRight;
+
+        Vector3 vectorRotatedToCameraSpace = cameraForwardZProduct + cameraRightXProduct;
+        vectorRotatedToCameraSpace.y = currentYValue;
+        return vectorRotatedToCameraSpace;
     }
     
 

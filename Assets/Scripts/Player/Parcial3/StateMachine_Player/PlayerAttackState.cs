@@ -39,6 +39,7 @@ public class PlayerAttackState : PlayerBaseState
         }
         else
         {
+            Ctx.animator.SetTrigger("move");
             Ctx._Attack = false;
         }
 
@@ -56,6 +57,7 @@ public class PlayerAttackState : PlayerBaseState
         }
         if(Ctx._TimePassed >= Ctx._ClipLength / Ctx._ClipSpeed)
         {
+            Ctx.animator.SetTrigger("move");
             Ctx._AttackAction = false;
             SwitchStates(Factory.Idle());
         }
@@ -67,12 +69,14 @@ public class PlayerAttackState : PlayerBaseState
         }
         else if(!Ctx._Attack && Ctx.isMovementPressed)
         {
+            Ctx.animator.SetTrigger("move");
             Ctx._AttackAction = false;
             SwitchStates(Factory.Walk());
             
         }
         else if (Ctx.isMovementPressed)
         {
+            Ctx.animator.SetTrigger("move");
             Ctx._AttackAction = false;
             SwitchStates(Factory.Walk());
         }

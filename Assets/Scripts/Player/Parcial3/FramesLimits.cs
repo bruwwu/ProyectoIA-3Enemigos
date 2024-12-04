@@ -7,6 +7,13 @@ public class FramesLimits : MonoBehaviour
 
     private float timer = 0f; // Temporizador para controlar la actualización
 
+    PlayerStateMachine player;
+
+    void Start() { 
+        // Inicializa la referencia a PlayerStateMachine 
+        player = GetComponent<PlayerStateMachine>();
+        }
+
     void Update()
     {
         timer += Time.deltaTime;
@@ -16,6 +23,17 @@ public class FramesLimits : MonoBehaviour
         {
             animator.Update(timer); // Actualiza el Animator
             timer = 0f; // Reinicia el temporizador
+        }
+
+        if (player.isAttacking == true)
+        {
+            Debug.Log("Estas en attack");
+            choppyRate = 400.0f;
+        }
+        else
+        {
+            Debug.Log("NOOOOOOOOOOO Estas en attack");
+            choppyRate = 0.1f;
         }
     }
 }
