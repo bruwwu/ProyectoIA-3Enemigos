@@ -17,13 +17,14 @@ public class BossChaseState : BossBaseState
             boss.speed = 1;
             boss.naomiAni.SetFloat("Speed", boss.speed);
         }
+         // Establecer el destino al jugador
+    boss.navMeshAgent.SetDestination(boss.player.position);
     }
 
   public override void UpdateState()
 {
     CheckSwitchStates();
-    // Establecer el destino al jugador
-    boss.navMeshAgent.SetDestination(boss.player.position);
+   
     
 }
 
@@ -44,6 +45,10 @@ public class BossChaseState : BossBaseState
         else if (boss.IsPlayerInRange(boss.detectedSphereRadious))
         {
             boss.SwitchState(Factory.Chase());
+        } 
+        else if(boss.IsPlayerInRange(boss.shootRadius)&& !boss.isJumping)
+        {
+            boss.SwitchState(Factory.Shoot());
         }
     }
 

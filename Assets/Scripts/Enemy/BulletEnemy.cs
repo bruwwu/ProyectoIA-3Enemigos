@@ -5,20 +5,21 @@ using UnityEngine;
 public class BulletEnemy : MonoBehaviour
 {
     // Asegúrate de arrastrar un GameObject que tenga el script HB_Slider
-    [SerializeField] HB_Slider hBb_Slider; 
+    public HealthGauge healthGauge;
+    public Portrait portrait;
 
-    void OnCollisionEnter(Collision collison)
+    void OnTriggerEnter(Collider collison)
     {
         if (collison.gameObject.tag == "Player")
         {
             Debug.Log("Me follan");
             
             // Aplicar daño al jugador
-            GameManager.gameManager.playerHealth.DmgUnit(15);
+            GameManager.gameManager.playerHealth.DmgUnit(1);
             
 
-            // Actualizar la barra de salud con el valor actual de la salud
-            hBb_Slider.SetHealth(GameManager.gameManager.playerHealth.Health);
+            healthGauge.OnCurrHealthChanged(GameManager.gameManager.playerHealth.Health);
+            portrait.OnReceiveDamage(1);
 
             Debug.Log(GameManager.gameManager.playerHealth.Health);
             Destroy(gameObject); //Destruir bala al chocar con el Player

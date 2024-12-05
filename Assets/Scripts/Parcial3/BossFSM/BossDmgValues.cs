@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BossDmgValues : MonoBehaviour
 {
-    public HB_Slider hB_Slider;
+    public HealthGauge healthGauge;
+    public Portrait portrait;
     public int velocityMagnitude;
 
     public void OnTriggerEnter(Collider collision)
@@ -12,10 +13,13 @@ public class BossDmgValues : MonoBehaviour
         // Si colisiona con el jugador, aplicar daño basado en la velocidad
         if (collision.gameObject.tag == "Player")
         {
-            // Asegúrate de que GameManager y playerHealth están correctamente configurados
-            GameManager.gameManager.playerHealth.VelDmgUnit(2, velocityMagnitude);
-            hB_Slider.SetHealth(GameManager.gameManager.playerHealth.Health);
-            Debug.Log(GameManager.gameManager.playerHealth.Health);
+           if (healthGauge != null)
+            {
+                GameManager.gameManager.playerHealth.DmgUnit(2);
+                healthGauge.OnCurrHealthChanged(GameManager.gameManager.playerHealth.Health);
+                portrait.OnReceiveDamage(2);
+                Debug.Log($"Player Health: {GameManager.gameManager.playerHealth.Health}");
+            }
         }
     }
     private void BossTakeDmg(int dmg)
@@ -27,7 +31,9 @@ public class BossDmgValues : MonoBehaviour
      public void ApplyWipeDamage(int wipeDamage)
     {
         GameManager.gameManager.playerHealth.DmgUnit(wipeDamage);
-        hB_Slider.SetHealth(GameManager.gameManager.playerHealth.Health);
+        healthGauge.OnCurrHealthChanged(GameManager.gameManager.playerHealth.Health);
+        portrait.OnReceiveDamage(9999);
+        Debug.Log($"Player Health: {GameManager.gameManager.playerHealth.Health}");
         Debug.Log("Wipe ejecutado, daño aplicado.");
     }
 }

@@ -35,6 +35,10 @@ public class BossIdleState : BossBaseState
             boss.isJumping = true;
             boss.SwitchState(Factory.Jump());
         }
+        else if(boss.IsPlayerInRange(boss.shootRadius))
+        {
+            boss.SwitchState(Factory.Shoot());
+        }
     }
 
     public override void InitializeSubState()

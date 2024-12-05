@@ -22,7 +22,7 @@ public class BossFSM : MonoBehaviour
     public Animator naomiAni;
 
     [Header("Melee")]
-
+    public float areaDmg;
     /*
     [Header("Ataque Especial")]
     public GameObject meteorPrefab;
@@ -41,6 +41,14 @@ public class BossFSM : MonoBehaviour
     // State Machine
     public BossBaseState currentState;
     public BossStateFactory stateFactory;
+    private bool block;
+
+    [Header("Disparo")]
+    public GameObject Mira;
+    public float shootRadius;
+    public GameObject balaCloud;
+    public bool isLockingIn = false; 
+    public float balaVelocity;
 
     void Start()
     {
@@ -73,6 +81,12 @@ public class BossFSM : MonoBehaviour
         {
             currentState.EnterState();
         }
+    }
+
+    public bool IsPlayerInShootRange(float shootRadius)
+    {
+        float distanceToPlayer = Vector3.Distance(player.position, transform.position);
+        return distanceToPlayer <= shootRadius;
     }
 
     public bool IsPlayerInRange(float range)
@@ -117,10 +131,51 @@ public class BossFSM : MonoBehaviour
         SwitchState(stateFactory.Wipe());
     }
 
+    public IEnumerator lockIn() // Corrutina para fijar al jugador
+    {
+        while (isLockingIn && IsPlayerInRange(shootRadius))
+        {
+            Vector3 relativePos = player.position - transform.position;
+            Quaternion toRotation = Quaternion.LookRotation(relativePos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 5f);
+
+            // Llama a yonBombing opcionalmente si es necesario
+            yonBombing();
+
+            yield return null; // Continuar en el siguiente frame
+        }
+
+        yield return new WaitForSeconds(2f);
+    }
+
+
+    public void yonBombing()
+    {
+        if(!block){
+        GameObject Balatemporal = Instantiate(Mira, balaCloud.transform.position, balaCloud.transform.rotation);
+        Rigidbody rb = Balatemporal.GetComponent<Rigidbody>();
+
+        rb.AddForce(transform.forward * balaVelocity, ForceMode.Impulse);
+        Destroy(Balatemporal, 4f);
+        StartCoroutine(WaitFor());
+        
+        }
+    }
+
+    IEnumerator WaitFor()
+    {
+        block = true;
+        yield return new WaitForSeconds(0.5f);
+        block = false;
+    }
+
     void OnDrawGizmos()
     {
         if (DebugGizmoManager.VisionCone)
         {
+            //deteccion dispro
+            Gizmos.color = Color.grey;
+            Gizmos.DrawWireSphere(transform.position, shootRadius);
             // Dibujar la esfera de salto
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, jumpSphereRadious);

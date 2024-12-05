@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public UnitHealthObject rocaHealth = new UnitHealthObject(30, 30);
 
     public UnitHealthEnemy baseEnemyHealth = new UnitHealthEnemy(100, 100);
+    public UnitHealthEnemy juanSquishi = new UnitHealthEnemy(20,20);
 
     public UnitHealthEnemy juanitoTorreta = new UnitHealthEnemy(60, 60);
     public UnitHealthEnemy NaomiBossMiViejaWe = new UnitHealthEnemy(500, 500);
