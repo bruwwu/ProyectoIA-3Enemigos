@@ -5,7 +5,7 @@ public class JaunSquishi : MonoBehaviour
 {
     [SerializeField] HealthGauge healthGauge;
     [SerializeField] Portrait portrait;
-    [SerializeField] CloudDMG cloudDMG;
+    public UnitHealthEnemy juanSquishiHealth;
     public GameObject playerGameObject;
     public float sphereRadious;
     public float maxSpeed = 5f;
@@ -16,9 +16,10 @@ public class JaunSquishi : MonoBehaviour
 
     private Rigidbody rb;
 
-    void Start()
+    public void Start()
     {
         rb = GetComponent<Rigidbody>();
+        juanSquishiHealth = new UnitHealthEnemy(GameManager.gameManager.juanSquishi.MaxHealth, GameManager.gameManager.juanSquishi.MaxHealth);
     }
 
     void Update()
@@ -52,6 +53,22 @@ public class JaunSquishi : MonoBehaviour
         }
     }
 
+    public void DmgUnit(int damage)
+    {
+        juanSquishiHealth.DmgUnit(damage);
+        Debug.Log($"Salud actual del JaunSquishi: {juanSquishiHealth.Health}");
+        if (juanSquishiHealth.Health == 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("JaunSquishi eliminado.");
+        Destroy(gameObject, 2f); // Destruir esta instancia específica tras un retraso
+    }
+
     public void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -65,6 +82,4 @@ public class JaunSquishi : MonoBehaviour
             Debug.Log($"Player Health: {GameManager.gameManager.playerHealth.Health}");
         }
     }
-
-
 }

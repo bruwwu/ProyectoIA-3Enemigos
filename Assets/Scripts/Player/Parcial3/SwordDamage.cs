@@ -7,6 +7,7 @@ public class SwordDamage : MonoBehaviour
     public HB_Slider bossHB_Slider;
     public CloudDMG cloudDMG;
     public activationPlaceholder activation;
+    public JaunSquishi jaunSquishi;
     public HealthGauge healthGauge;
     public LockOnSystem LockIn;
      void OnTriggerEnter(Collider collider)
@@ -63,27 +64,37 @@ public class SwordDamage : MonoBehaviour
                 Destroy(collider.gameObject, 0.6f);
             }
         }
-        else if(collider.gameObject.CompareTag("JuanSquishi"))
+        else if (collider.gameObject.CompareTag("JuanSquishi"))
         {
             Debug.Log("Disparaste a un JuanSquishi");
-            GameManager.gameManager.juanSquishi.DmgUnit(10);
-            Debug.Log(GameManager.gameManager.juanSquishi.Health);
-            if(GameManager.gameManager.juanSquishi.Health == 0)
-            {
-                LockIn.cinemachineFreeLook.m_LookAt = LockIn.playerTransform;
-                Debug.Log("JuanSquishi Muerto");
-                cloudDMG.StartCoroutine(cloudDMG.ImmunityTimer());
-                activation.StartCoroutine(activation.InmuneTime());
-                
 
-                GameManager.gameManager.playerHealth.HealthUnit(10);
-                healthGauge.OnCurrHealthChanged(GameManager.gameManager.playerHealth.Health);
-                
-                
-                
-                Vector3 newPosition = new Vector3(collider.gameObject.transform.position.x, 60f, collider.gameObject.transform.position.z);
-                collider.gameObject.transform.position = newPosition;
-                Destroy(collider.gameObject, 2f);
+            // Obtener la instancia específica de JaunSquishi
+            JaunSquishi juan = collider.gameObject.GetComponent<JaunSquishi>();
+            if (juan != null)
+            {
+                // Aplicar daño a la instancia específica
+                juan.DmgUnit(10);
+
+                // Verificar si el enemigo ha muerto
+                if (juan.juanSquishiHealth.Health == 0)
+                {
+                    LockIn.cinemachineFreeLook.m_LookAt = LockIn.playerTransform;
+
+                    Debug.Log("JuanSquishi Muerto");
+
+                    // Activar efectos de inmunidad
+                    cloudDMG.StartCoroutine(cloudDMG.ImmunityTimer());
+                    activation.StartCoroutine(activation.InmuneTime());
+
+                    // Curar al jugador
+                    GameManager.gameManager.playerHealth.HealthUnit(10);
+                    healthGauge.OnCurrHealthChanged(GameManager.gameManager.playerHealth.Health);
+
+                    // Mover y destruir el enemigo
+                    Vector3 newPosition = new Vector3(collider.gameObject.transform.position.x, 60f, collider.gameObject.transform.position.z);
+                    collider.gameObject.transform.position = newPosition;
+                    Destroy(collider.gameObject, 2f);
+                }
             }
         }
     }
