@@ -71,6 +71,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LockOn"",
+                    ""type"": ""Button"",
+                    ""id"": ""a1a189d4-ad81-40a9-a53e-b784f379ba1e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d555203-6a5d-43ce-842a-c3fe6b1c8842"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockOn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -253,6 +273,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_CharacterControls_DodgeRoll = m_CharacterControls.FindAction("Dodge Roll", throwIfNotFound: true);
         m_CharacterControls_Hit = m_CharacterControls.FindAction("Hit", throwIfNotFound: true);
         m_CharacterControls_Look = m_CharacterControls.FindAction("Look", throwIfNotFound: true);
+        m_CharacterControls_LockOn = m_CharacterControls.FindAction("LockOn", throwIfNotFound: true);
         // pitufin
         m_pitufin = asset.FindActionMap("pitufin", throwIfNotFound: true);
         m_pitufin_RAbility = m_pitufin.FindAction("RAbility", throwIfNotFound: true);
@@ -324,6 +345,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_DodgeRoll;
     private readonly InputAction m_CharacterControls_Hit;
     private readonly InputAction m_CharacterControls_Look;
+    private readonly InputAction m_CharacterControls_LockOn;
     public struct CharacterControlsActions
     {
         private @PlayerInput m_Wrapper;
@@ -333,6 +355,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @DodgeRoll => m_Wrapper.m_CharacterControls_DodgeRoll;
         public InputAction @Hit => m_Wrapper.m_CharacterControls_Hit;
         public InputAction @Look => m_Wrapper.m_CharacterControls_Look;
+        public InputAction @LockOn => m_Wrapper.m_CharacterControls_LockOn;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -357,6 +380,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @LockOn.started += instance.OnLockOn;
+            @LockOn.performed += instance.OnLockOn;
+            @LockOn.canceled += instance.OnLockOn;
         }
 
         private void UnregisterCallbacks(ICharacterControlsActions instance)
@@ -376,6 +402,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @LockOn.started -= instance.OnLockOn;
+            @LockOn.performed -= instance.OnLockOn;
+            @LockOn.canceled -= instance.OnLockOn;
         }
 
         public void RemoveCallbacks(ICharacterControlsActions instance)
@@ -462,6 +491,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnDodgeRoll(InputAction.CallbackContext context);
         void OnHit(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnLockOn(InputAction.CallbackContext context);
     }
     public interface IPitufinActions
     {

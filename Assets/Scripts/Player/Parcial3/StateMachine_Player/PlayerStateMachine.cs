@@ -71,6 +71,11 @@ public class PlayerStateMachine : MonoBehaviour
     public bool _Attack{get{return attack;} set{attack = value;}}
 
     public bool _DodgeBlock{get{return dodgeBlock;} set{dodgeBlock = value;}}
+
+    public bool LockCameraPosition { get; set; }
+
+    EnemyLockOn enemyLockOn;
+
     void Awake()
     {
         playerInput = new PlayerInput();
@@ -96,6 +101,10 @@ public class PlayerStateMachine : MonoBehaviour
 
         playerInput.CharacterControls.Hit.canceled += onAttack;
     }
+
+    
+    
+    
 
     void OnDodge (InputAction.CallbackContext context)
     {
@@ -173,8 +182,13 @@ public class PlayerStateMachine : MonoBehaviour
         else if(isAttacking && !Attackwait)
         {
             attack = true;
+            if(isMovementPressed && isAttacking)
+            {
+                attack = true;
+                characterController.Move(_cameraRelativeMovement * walkingVelocity * Time.deltaTime);
+            }
         }
-        else
+        else if(_isMovementPressed)
         {
             characterController.Move(_cameraRelativeMovement * walkingVelocity * Time.deltaTime);
         }

@@ -32,6 +32,10 @@ public class PlayerWalkingState : PlayerBaseState
         {
             SwitchStates(Factory.Dodge());
         }
+        else if(Ctx.isMovementPressed && Ctx._Attack)
+        {
+            SwitchStates(Factory.Attack());
+        }
     }
 
     public override void InitializeSubState(){}

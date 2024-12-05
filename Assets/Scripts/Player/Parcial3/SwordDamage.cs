@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class SwordDamage : MonoBehaviour
 {
+    public LockOnSystem Lock;
      void OnTriggerEnter(Collider collider)
     {
+
         if(collider.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Disparaste a un amogus");
@@ -17,6 +19,7 @@ public class SwordDamage : MonoBehaviour
                 Vector3 newPosition = new Vector3(collider.gameObject.transform.position.x, 60f, collider.gameObject.transform.position.z);
                 collider.gameObject.transform.position = newPosition;
                 Destroy(collider.gameObject, 0.5f);
+                Lock.cinemachineFreeLook.m_LookAt = Lock.playerTransform;
             }
         }
         else if(collider.gameObject.CompareTag("juanitoTorreta"))
