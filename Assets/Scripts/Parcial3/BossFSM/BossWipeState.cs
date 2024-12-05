@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossWipeState : BossBaseState
 {
@@ -50,7 +52,21 @@ public class BossWipeState : BossBaseState
             {
                 boss.bossDmgValues.ApplyWipeDamage(boss.wipeDamage);
                 Debug.Log("Wipe ejecutado. Jugador dañado.");
+                boss.StartCoroutine(waitForVfx());
             }
         }
+
+        
+
+        
+    }
+
+    private IEnumerator waitForVfx()
+    {
+        boss.cameraSync.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        boss.Vfx.SetActive(true);
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene(1);
     }
 }

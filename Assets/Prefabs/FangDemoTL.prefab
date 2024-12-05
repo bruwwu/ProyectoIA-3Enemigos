@@ -6190,6 +6190,7 @@ MonoBehaviour:
   cloudDMG: {fileID: 0}
   healthGauge: {fileID: 0}
   activation: {fileID: 7754555919075373631}
+  jaunSquishi: {fileID: 0}
 --- !u!4 &7953295330764742427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7396812474024962126, guid: 7b29f577390aff244bde6dac64d6e1da,
@@ -6493,6 +6494,7 @@ MonoBehaviour:
   cloudDMG: {fileID: 0}
   healthGauge: {fileID: 0}
   activation: {fileID: 7754555919075373631}
+  jaunSquishi: {fileID: 0}
 --- !u!4 &8667573035717488820 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7396812474024962126, guid: 7b29f577390aff244bde6dac64d6e1da,
@@ -6628,6 +6630,7 @@ MonoBehaviour:
   cloudDMG: {fileID: 0}
   healthGauge: {fileID: 0}
   activation: {fileID: 7754555919075373631}
+  jaunSquishi: {fileID: 0}
 --- !u!1001 &5772111848466735222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6754,6 +6757,7 @@ MonoBehaviour:
   bossHB_Slider: {fileID: 0}
   cloudDMG: {fileID: 0}
   activation: {fileID: 7754555919075373631}
+  jaunSquishi: {fileID: 0}
   healthGauge: {fileID: 0}
   LockIn: {fileID: 5488632067315676696}
 --- !u!65 &182068399292244501
@@ -7346,10 +7350,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7754555919075373631}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c7d00df03f298704aacdbb225aefad51,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8328926316264368583}
   m_SourcePrefab: {fileID: 100100000, guid: c7d00df03f298704aacdbb225aefad51, type: 3}
 --- !u!4 &5921497393333553921 stripped
 Transform:
@@ -7529,19 +7529,3 @@ MonoBehaviour:
   qCooldown: 5
   qDuracion: 0.35
   qDisponible: 1
---- !u!114 &8328926316264368583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7855312338039721563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6910c32ac9b790f40b699bb11e2c8429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyTag: JuanSquishi
-  maxDistance: 50
-  cinemachineFreeLook: {fileID: 1817572173295696275}
-  playerTransform: {fileID: 7370277539235337441}

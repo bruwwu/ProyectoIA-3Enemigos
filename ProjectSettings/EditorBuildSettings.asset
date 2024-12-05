@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NavMesh/Scenes/NavMesh.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/TercerParcial/bruwu-parcialin3/bruwu-parcialin3.unity
+    guid: 508283b6cec6d524da3d17d7632b9877
   m_configObjects: {}

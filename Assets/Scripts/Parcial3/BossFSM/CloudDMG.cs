@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CloudDMG : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class CloudDMG : MonoBehaviour
         if (GameManager.gameManager.playerHealth.Health <= 0)
         {
             Debug.Log("fang tiesa");
+            SceneManager.LoadScene(1);
             CancelInvoke(nameof(DealDamage));
         }
     }

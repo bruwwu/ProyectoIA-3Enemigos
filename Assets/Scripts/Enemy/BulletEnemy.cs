@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BulletEnemy : MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class BulletEnemy : MonoBehaviour
             Debug.Log(GameManager.gameManager.playerHealth.Health);
             Destroy(gameObject); //Destruir bala al chocar con el Player
             
+        }
+        else if(GameManager.gameManager.playerHealth.Health <= 0)
+        {
+             SceneManager.LoadScene(1);
         }
     }
 }

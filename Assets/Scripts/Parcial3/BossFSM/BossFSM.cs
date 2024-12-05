@@ -4,6 +4,7 @@ using DebugManager;
 using UnityEngine;
 using UnityEngine.AI;
 using Utilities;
+using UnityEngine.SceneManagement;
 
 public class BossFSM : MonoBehaviour
 {
@@ -42,6 +43,10 @@ public class BossFSM : MonoBehaviour
     public BossBaseState currentState;
     public BossStateFactory stateFactory;
     private bool block;
+    
+    public GameObject cameraSync;
+
+    public GameObject Vfx;
 
     [Header("Disparo")]
     public GameObject Mira;
@@ -56,6 +61,8 @@ public class BossFSM : MonoBehaviour
         naomiAni = GetComponent<Animator>();
         stateFactory = new BossStateFactory(this);
         isJumping = false;
+        cameraSync.SetActive(false);
+        Vfx.SetActive(false);
         // Inicializa en el estado Idle
         SwitchState(stateFactory.Idle());
         StartCoroutine(IniciarTempo());
