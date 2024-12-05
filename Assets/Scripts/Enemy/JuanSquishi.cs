@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class JaunSquishi : MonoBehaviour
 {
-    [SerializeField] HealthGauge healthGauge; // Referencia al HealthGauge
+    [SerializeField] HealthGauge healthGauge;
     [SerializeField] Portrait portrait;
+    [SerializeField] CloudDMG cloudDMG;
     public GameObject playerGameObject;
     public float sphereRadious;
     public float maxSpeed = 5f;
     public float maxAcceleration = 5f;
+    public float inmuneTime = 5f; // Tiempo de inmunidad
     public float turnSpeed = 5f;
     public float slowDownRadius = 3f;
 
@@ -55,18 +57,14 @@ public class JaunSquishi : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             // Aplicar daño al jugador
-            int damage = 1; // Daño fijo de 1
+            int damage = 1;
             GameManager.gameManager.playerHealth.DmgUnit(damage);
-
-            // Actualizar la barra de vida (HealthGauge)
-            if (healthGauge != null)
-            {
-                portrait.OnReceiveDamage(1);
-                float newHealthPercentage = GameManager.gameManager.playerHealth.Health;
-                healthGauge.OnCurrHealthChanged(newHealthPercentage);
-            }
-
+            portrait.OnReceiveDamage(1);
+            float newHealthPercentage = GameManager.gameManager.playerHealth.Health;
+            healthGauge.OnCurrHealthChanged(newHealthPercentage);
             Debug.Log($"Player Health: {GameManager.gameManager.playerHealth.Health}");
         }
     }
+
+
 }

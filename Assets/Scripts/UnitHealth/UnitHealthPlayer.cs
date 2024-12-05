@@ -58,16 +58,15 @@ public class UnitHealthPlayer
 
     //En caso de hacer un sistema de curacion, se implementa la misma logica, pero con MaxHealth
     
-    /*public void HealthUnit(int healthAmount)
+    public void HealthUnit(int healthAmount)
     {
-        if (currentHealth < currentMaxHealth)
-        {
-            currentHealth += healthAmount;
-        }
-        else if (currentHealth > currentMaxHealth)
+        currentHealth += healthAmount;
+
+        // Asegurarse de que la salud no exceda el valor máximo
+        if (currentHealth > currentMaxHealth)
         {
             currentHealth = currentMaxHealth;
         }
+    }
 
-    }*/
 }

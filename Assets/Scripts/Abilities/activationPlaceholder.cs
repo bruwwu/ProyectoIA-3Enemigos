@@ -10,8 +10,13 @@ public class activationPlaceholder : MonoBehaviour
 {
     [Header("EnemyTemporizer")]
     public BossFSM bossFSM;
+    public CloudDMG cloudDmg;
     public TMP_Text finalBattleTempo;
     [Header("Componentes/UI")]
+    //Inmune Timpe
+    public TMP_Text inmuneTimer;
+    public TMP_Text inmuneText;
+    //PlayerInput
     public PlayerInput pitufin; 
     //Q
     public Image qImagen;
@@ -67,7 +72,6 @@ public class activationPlaceholder : MonoBehaviour
 
     void Update()
     {
-        
     }
     //BLOQUE DE HABILIDAD R
     void RActivation()
@@ -94,6 +98,29 @@ public class activationPlaceholder : MonoBehaviour
         }
         finalBattleTempo.text = "gg papuh :v";
     }
+    //webos
+    public IEnumerator InmuneTime()
+{
+    float tiempoRestante = cloudDmg.duration;
+
+    // Mostrar el texto inicial de inmunidad
+    inmuneText.text = "Immunity: ";
+    inmuneTimer.text = tiempoRestante.ToString();
+
+    while (tiempoRestante > 0)
+    {
+        // Actualizar el texto con el tiempo restante
+        inmuneTimer.text = Mathf.CeilToInt(tiempoRestante).ToString();
+        tiempoRestante--;
+
+        yield return new WaitForSeconds(1f);
+    }
+
+    // Limpiar el texto una vez que termine la inmunidad
+    inmuneText.text = "";
+    inmuneTimer.text = "";
+}
+
 
 
     IEnumerator RIniciarDuracion()

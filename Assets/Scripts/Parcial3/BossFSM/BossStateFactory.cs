@@ -27,14 +27,8 @@ public class BossStateFactory
     {
         return new BossWipeState(boss, this);
     }
-
-/*    public BossBaseState MeteorCast()
+    public BossBaseState Shoot()
     {
-        return new BossMeteorCastState(boss, this);
+        return new BossShootState(boss, this);
     }
-
-    public BossBaseState LockIn()
-    {
-        return new BossLockInState(boss, this);
-    }*/
 }
