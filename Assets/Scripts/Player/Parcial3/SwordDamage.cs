@@ -8,6 +8,7 @@ public class SwordDamage : MonoBehaviour
     public CloudDMG cloudDMG;
     public activationPlaceholder activation;
     public HealthGauge healthGauge;
+    public LockOnSystem LockIn;
      void OnTriggerEnter(Collider collider)
     {
         if(collider.gameObject.CompareTag("Enemy"))
@@ -55,6 +56,7 @@ public class SwordDamage : MonoBehaviour
             Debug.Log(GameManager.gameManager.NaomiBossMiViejaWe.Health);
             if(GameManager.gameManager.NaomiBossMiViejaWe.Health == 0)
             {
+                LockIn.cinemachineFreeLook.m_LookAt = LockIn.playerTransform;
                 Debug.Log("NaomiKilled");
                 Vector3 newPosition = new Vector3(collider.gameObject.transform.position.x, 60.0f, collider.gameObject.transform.position.z);
                 collider.gameObject.transform.position = newPosition;
@@ -68,6 +70,7 @@ public class SwordDamage : MonoBehaviour
             Debug.Log(GameManager.gameManager.juanSquishi.Health);
             if(GameManager.gameManager.juanSquishi.Health == 0)
             {
+                LockIn.cinemachineFreeLook.m_LookAt = LockIn.playerTransform;
                 Debug.Log("JuanSquishi Muerto");
                 cloudDMG.StartCoroutine(cloudDMG.ImmunityTimer());
                 activation.StartCoroutine(activation.InmuneTime());

@@ -42,6 +42,8 @@ public class LockOnSystem : MonoBehaviour
         playerInput.CharacterControls.Disable();
     }
 
+    
+
     public void OnLockOn(InputAction.CallbackContext context)
     {
         if (context.performed)

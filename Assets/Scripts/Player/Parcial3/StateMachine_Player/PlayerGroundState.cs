@@ -55,7 +55,8 @@ public class PlayerGroundState : PlayerBaseState
         Ctx.CurrentMovementY = Ctx.GroundedGravity; Ctx.CurrentDodgeMovementY = Ctx.GroundedGravity; 
     } 
     else { 
-        Ctx.CurrentMovementY += Ctx.Gravity * Time.deltaTime; Ctx.CurrentDodgeMovementY += Ctx.Gravity * Time.deltaTime; 
+        Ctx.CurrentMovementY += Ctx.Gravity * Time.deltaTime; 
+        Ctx.CurrentDodgeMovementY += Ctx.Gravity * Time.deltaTime; 
     } // Actualiza el movimiento aplicado en el eje Y Ctx.AppliedMovementY = Ctx.CurrentMovementY; 
     }
 }

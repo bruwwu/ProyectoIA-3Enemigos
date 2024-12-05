@@ -39,6 +39,9 @@ public class PlayerStateMachine : MonoBehaviour
 
     public bool dodgeBlock;
 
+    public Transform enemyTransform;
+
+
     PlayerBaseState _currentState;
     PlayerStateFactory _states;
 
@@ -213,7 +216,8 @@ public class PlayerStateMachine : MonoBehaviour
         vectorRotatedToCameraSpace.y = currentYValue;
         return vectorRotatedToCameraSpace;
     }
-    
+
+   
 
     void OnEnable()
     {
