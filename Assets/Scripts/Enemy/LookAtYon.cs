@@ -14,7 +14,7 @@ public class LookAtYon : MonoBehaviour
     private bool isRotating = false;  // Para controlar la activación de la rotación
 
     [Header("Corrutina")]
-   public float idleRotationSpeed = 30f;  // Velocidad de la rotación idle
+    public float idleRotationSpeed = 30f;  // Velocidad de la rotación idle
     public float maxRotationAngle = 90f;   // Ángulo máximo de rotación
     private float currentRotationAngle = 0f;
     private int rotationDirection = 1; 
@@ -23,13 +23,19 @@ public class LookAtYon : MonoBehaviour
     public GameObject BalaPrefabInicio;
     public float BalaVelocidad;
 
+    [Header("Dificultad")]
+    float dificultad;
+    private Renderer juanitoRenderer;
+
     private bool block;
     // 1 = rotación positiva, -1 = rotación negativa
     
     void Start()
     {
+        juanitoRenderer = GetComponent<Renderer>();
         // Iniciar la rotación de juanitoTorreta al inicio
         StartCoroutine(rotateIdle());
+        difficulty(0.0f, 0.0f, 0.0f);
     }
 
     void Update()
@@ -55,6 +61,29 @@ public class LookAtYon : MonoBehaviour
                  // Volver a iniciar la rotación
             }
         }
+    }
+
+    void difficulty(float _idleRotationSpeed, float _maxRotationAngle, float _BalaVelocidad)
+    {
+        dificultad = (idleRotationSpeed * _idleRotationSpeed) + (maxRotationAngle * _maxRotationAngle) + (BalaVelocidad * _BalaVelocidad);
+        enemyColor(dificultad);
+    }
+
+    void enemyColor(float _dificultad)
+    {
+        if (dificultad >= 465) 
+        {
+            juanitoRenderer.material.color = Color.red; // Dificultad alta
+        } 
+        else if (dificultad >= 310) 
+        {
+            juanitoRenderer.material.color = Color.yellow; // Dificultad media
+        } 
+        else 
+        {
+            juanitoRenderer.material.color = Color.green; // Dificultad baja
+        }
+
     }
 
     void OnDrawGizmos()
