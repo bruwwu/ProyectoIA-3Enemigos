@@ -35,66 +35,90 @@ public class LookAtYon : MonoBehaviour
     {
         modoDiablo,
         HPModifier,
-        darkwarrior777
+        darkwarrior777,
+        elRotador
     }
     void Start()
     {
-        // Obtiene el Renderer del GameObject para luego modificar el color
         enemyRenderer = GetComponent<Renderer>();
         if(enemyRenderer == null)
         {
             Debug.LogError("No se encontró Renderer en el enemigo");
         }
         
-        // Guardar los valores base
+        // Valores base
         float baseIdleRotationSpeed = idleRotationSpeed;
         float baseMaxRotationAngle = maxRotationAngle;
         float baseBalaVelocidad = BalaVelocidad;
+        float baseConeDistance = coneDistance;
         float baseHP = GameManager.gameManager.juanitoTorreta.Health;
         
-
-        if(difficultyMode == Difficulty.modoDiablo)
+        // Cálculo de dificultad y modificaciones específicas para cada modo
+        switch(difficultyMode)
         {
-        // Calculamos la dificultad en base a las propiedades originales
-        dificultad = GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.8f, 2.0f) +
-                     (baseIdleRotationSpeed * Random.Range(0.5f, 1.0f)) +
-                     (baseMaxRotationAngle * Random.Range(0.5f, 1.0f)) +
-                     baseBalaVelocidad * Random.Range(0.5f, 1.0f);
+            case Difficulty.modoDiablo:
+                dificultad = GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.8f, 2.0f) +
+                             baseIdleRotationSpeed * Random.Range(0.5f, 1.0f) +
+                             baseMaxRotationAngle * Random.Range(0.5f, 1.0f) +
+                             baseBalaVelocidad * Random.Range(0.5f, 1.0f);
+                // Solo modificamos los parámetros de rotación y disparo
+                idleRotationSpeed = baseIdleRotationSpeed * (1 + dificultad / 800f);
+                maxRotationAngle = baseMaxRotationAngle * (1 + dificultad / 800f);
+                BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 800f);
+                // Otros parámetros se mantienen
+                coneDistance = baseConeDistance;
+                HP = baseHP;
+                break;
+                
+            case Difficulty.HPModifier:
+                dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) + 
+                              baseBalaVelocidad * Random.Range(0.0f, 1.0f)) / 2;
+                // Se aplica la modificación principalmente a la HP
+                HP = baseHP * (1 + dificultad / 400f);
+                idleRotationSpeed = baseIdleRotationSpeed;
+                maxRotationAngle = baseMaxRotationAngle;
+                BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 300f);
+                coneDistance = baseConeDistance;
+                break;
+                
+            case Difficulty.darkwarrior777:
+                dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) +
+                              baseIdleRotationSpeed * Random.Range(0.0f, 1.0f) +
+                              baseMaxRotationAngle * Random.Range(0.0f, 1.0f) +
+                              baseBalaVelocidad * Random.Range(0.0f, 1.0f) * 2);
+                // Se aplican modificaciones a casi todos los parámetros, pero con distintos factores
+                idleRotationSpeed = baseIdleRotationSpeed * (1 + dificultad / 600f);
+                maxRotationAngle = baseMaxRotationAngle * (1 + dificultad / 600f);
+                BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 600f);
+                coneDistance = baseConeDistance;
+                HP = baseHP;
+                break;
+                
+            case Difficulty.elRotador:
+                dificultad = baseIdleRotationSpeed * Random.Range(2.0f, 5.0f) * 5f + 
+                             coneDistance * Random.Range(0.5f, 1.0f) * 2f;
+                //ola yonesi y niggawarrior
+                idleRotationSpeed = baseIdleRotationSpeed * (1 + dificultad / 800f);
+                maxRotationAngle = baseMaxRotationAngle;
+                BalaVelocidad = baseBalaVelocidad;;
+                coneDistance = baseConeDistance * (1 + dificultad / 200);
+                HP = baseHP;
+                break;
+                
+            default:
+                Debug.LogError("Modo de dificultad no reconocido");
+                break;
         }
-        else if(difficultyMode == Difficulty.HPModifier){
-        dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) + 
-                    baseBalaVelocidad * Random.Range(0.0f, 1.0f)) / 2;
-        }
-        else if (difficultyMode == Difficulty.darkwarrior777)
-        {
-            dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) +
-                     baseIdleRotationSpeed * Random.Range(0.0f, 1.0f) +
-                     baseMaxRotationAngle * Random.Range(0.0f, 1.0f) +
-                     baseBalaVelocidad * Random.Range(0.0f, 1.0f) * 2);
-        }
-        else
-        {
-            Debug.LogError("Modo de dificultad no reconocido");
-        }
-        // Aplicar un factor de modificación basado en la dificultad (ajusta el divisor según lo que necesites)
-        float factor = 1 + (dificultad / 500f);
-        HP = baseHP * factor;
-        idleRotationSpeed = baseIdleRotationSpeed * factor;
-        maxRotationAngle = baseMaxRotationAngle * factor;
-        BalaVelocidad = baseBalaVelocidad * factor;
         
-        // Debug: Mostrar los valores alterados
-        
+        // Debug: Mostrar los valores modificados
         Debug.Log("Valores alterados: " +
                   "idleRotationSpeed: " + idleRotationSpeed +
                   ", maxRotationAngle: " + maxRotationAngle + 
                   ", BalaVelocidad: " + BalaVelocidad +
-                  ", HP: " + HP);
-
-        // Cambiar color según la dificultad
-        SetEnemyColor(dificultad);
+                  ", HP: " + HP +
+                  ", coneDistance: " + coneDistance);
         
-        // Inicia la rotación idle
+        SetEnemyColor(dificultad);
         StartCoroutine(rotateIdle());
     }
 

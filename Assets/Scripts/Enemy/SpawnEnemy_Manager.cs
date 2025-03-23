@@ -31,7 +31,7 @@ public class SpawnEnemy_Manager : MonoBehaviour
 
     public void Spawner()
     { 
-        Debug.Log("penesotes");
+        Debug.Log("penes gordos y jugosos");
         GameObject targetSpawn = spawnTargets[Random.Range(0, spawnTargets.Length)];
         Instantiate(juanitoSpawn_object, targetSpawn.transform.position, Quaternion.identity);
 
@@ -39,7 +39,7 @@ public class SpawnEnemy_Manager : MonoBehaviour
         if(lookAtYon != null)
         {
             // Random.Range(0,3) devolverá 0, 1 o 2, mapeando así a las tres opciones del enum
-            lookAtYon.difficultyMode = (LookAtYon.Difficulty)Random.Range(0, 3);
+            lookAtYon.difficultyMode = (LookAtYon.Difficulty)Random.Range(0, 4);
             Debug.Log("Dificultad: " + lookAtYon.difficultyMode);
         }
     }
