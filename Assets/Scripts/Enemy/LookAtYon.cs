@@ -33,11 +33,13 @@ public class LookAtYon : MonoBehaviour
     public float HP;
     public enum Difficulty
     {
-        modoDiablo,
-        HPModifier,
-        darkwarrior777,
-        elRotador
+        //Le chaqueteamos unos enums para poder seleccionar la dificultad de los enemigos
+        modoDiablo, //Dificultad alta
+        HPModifier, //Modificador de HP
+        darkwarrior777, //Dificultad media no tan cabrona
+        elRotador //Le aumenta el rango y velocidad de bala al enemigo, al chile está bien perro este
     }
+    
     void Start()
     {
         enemyRenderer = GetComponent<Renderer>();
@@ -46,7 +48,7 @@ public class LookAtYon : MonoBehaviour
             Debug.LogError("No se encontró Renderer en el enemigo");
         }
         
-        // Valores base
+        // Se guardan los valores base de los parámetros, ya que los necestiamos para modificarlos de manera local en cada difficultyMode
         float baseIdleRotationSpeed = idleRotationSpeed;
         float baseMaxRotationAngle = maxRotationAngle;
         float baseBalaVelocidad = BalaVelocidad;
@@ -54,54 +56,73 @@ public class LookAtYon : MonoBehaviour
         float baseHP = GameManager.gameManager.juanitoTorreta.Health;
         
         // Cálculo de dificultad y modificaciones específicas para cada modo
-        switch(difficultyMode)
+        switch(difficultyMode) //Hola un switch para seleccionar la dificultad
         {
-            case Difficulty.modoDiablo:
+            case Difficulty.modoDiablo: 
+            /* 
+            Se modifican todos los valores (menos coneDistance) y el escalado de la dificultad es el mas perro aquí, 
+            este enemigo es el que tiene los mayores escalados y es raro ver uno de color amarillo*/
                 dificultad = GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.8f, 2.0f) +
                              baseIdleRotationSpeed * Random.Range(0.5f, 1.0f) +
                              baseMaxRotationAngle * Random.Range(0.5f, 1.0f) +
-                             baseBalaVelocidad * Random.Range(0.5f, 1.0f);
+                             baseBalaVelocidad * Random.Range(0.5f, 1.0f); 
                 // Solo modificamos los parámetros de rotación y disparo
                 idleRotationSpeed = baseIdleRotationSpeed * (1 + dificultad / 800f);
                 maxRotationAngle = baseMaxRotationAngle * (1 + dificultad / 800f);
                 BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 800f);
-                // Otros parámetros se mantienen
+                HP = baseHP + (1 + dificultad / 800f);
+
+                //No modificado
                 coneDistance = baseConeDistance;
-                HP = baseHP;
+              
                 break;
                 
             case Difficulty.HPModifier:
+
+            /* 
+            Este es puro escalado de vida, algo sencillito
+            */
                 dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) + 
                               baseBalaVelocidad * Random.Range(0.0f, 1.0f)) / 2;
                 // Se aplica la modificación principalmente a la HP
                 HP = baseHP * (1 + dificultad / 400f);
+                BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 300f);
+
+                //No modificado
                 idleRotationSpeed = baseIdleRotationSpeed;
                 maxRotationAngle = baseMaxRotationAngle;
-                BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 300f);
                 coneDistance = baseConeDistance;
                 break;
                 
             case Difficulty.darkwarrior777:
-                dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) +
-                              baseIdleRotationSpeed * Random.Range(0.0f, 1.0f) +
+            /* 
+                Este es un enemigo con dificultad media, no tan cabrona, no conteine escalado de vida
+            */
+                dificultad = (baseIdleRotationSpeed * Random.Range(0.0f, 1.0f) +
                               baseMaxRotationAngle * Random.Range(0.0f, 1.0f) +
                               baseBalaVelocidad * Random.Range(0.0f, 1.0f) * 2);
                 // Se aplican modificaciones a casi todos los parámetros, pero con distintos factores
                 idleRotationSpeed = baseIdleRotationSpeed * (1 + dificultad / 600f);
                 maxRotationAngle = baseMaxRotationAngle * (1 + dificultad / 600f);
                 BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 600f);
+                //No modificado
                 coneDistance = baseConeDistance;
                 HP = baseHP;
                 break;
                 
             case Difficulty.elRotador:
+            /* 
+            Borren a este wey porfas, tiene un rango de disparo muy grande, rotación rápida y balas muy veloces
+            */
                 dificultad = baseIdleRotationSpeed * Random.Range(2.0f, 5.0f) * 5f + 
-                             coneDistance * Random.Range(0.5f, 1.0f) * 2f;
+                             coneDistance * Random.Range(0.5f, 1.0f) * 2f + 
+                             BalaVelocidad * Random.Range(0.5f, 1.0f) * 2f;
                 //ola yonesi y niggawarrior
                 idleRotationSpeed = baseIdleRotationSpeed * (1 + dificultad / 800f);
-                maxRotationAngle = baseMaxRotationAngle;
-                BalaVelocidad = baseBalaVelocidad;;
+                BalaVelocidad = baseBalaVelocidad * (1 + dificultad / 200);
                 coneDistance = baseConeDistance * (1 + dificultad / 200);
+                //No modificado
+                maxRotationAngle = baseMaxRotationAngle;
                 HP = baseHP;
                 break;
                 
@@ -118,7 +139,7 @@ public class LookAtYon : MonoBehaviour
                   ", HP: " + HP +
                   ", coneDistance: " + coneDistance);
         
-        SetEnemyColor(dificultad);
+        SetEnemyColor(dificultad); //Color en base a la dificultad calculada en cada una de las
         StartCoroutine(rotateIdle());
     }
 
@@ -215,11 +236,11 @@ public class LookAtYon : MonoBehaviour
     #region IA Diff
     void SetEnemyColor(float diff)
 {
-    if(diff >= 465) 
+    if(diff >= 800) 
     {
         enemyRenderer.material.color = Color.red; // Dificultad alta
     } 
-    else if(diff >= 310) 
+    else if(diff >= 500) 
     {
         enemyRenderer.material.color = Color.yellow; // Dificultad media
     } 
