@@ -7,6 +7,7 @@ public class LookAtYon : MonoBehaviour
 {
     [Header("VisionCone")]
     public Transform juanitoTorreta;
+    public GameObject juanersioTorreta;
     public Transform player;
     public float coneAngle;
     public float coneDistance;
@@ -25,10 +26,56 @@ public class LookAtYon : MonoBehaviour
 
     private bool block;
     // 1 = rotación positiva, -1 = rotación negativa
+
+    [Header("IA Diff")]
+    public Renderer enemyRenderer;
+    public float dificultad;
     
     void Start()
     {
-        // Iniciar la rotación de juanitoTorreta al inicio
+        // Obtiene el Renderer del GameObject para luego modificar el color
+        enemyRenderer = GetComponent<Renderer>();
+        if(enemyRenderer == null)
+        {
+            Debug.LogError("No se encontró Renderer en el enemigo");
+        }
+        
+        // Guardar los valores base
+        float baseIdleRotationSpeed = idleRotationSpeed;
+        float baseMaxRotationAngle = maxRotationAngle;
+        float baseBalaVelocidad = BalaVelocidad;
+        
+        // Calculamos la dificultad en base a las propiedades originales
+        dificultad = (baseIdleRotationSpeed * Random.Range(0.0f, 1.0f)) +
+                     (baseMaxRotationAngle * Random.Range(0.0f, 1.0f)) +
+                     (baseBalaVelocidad * Random.Range(0.0f, 1.0f));
+
+        // Aplicar un factor de modificación basado en la dificultad (ajusta el divisor según lo que necesites)
+        float factor = 1 + (dificultad / 500f);
+        idleRotationSpeed = baseIdleRotationSpeed * factor;
+        maxRotationAngle = baseMaxRotationAngle * factor;
+        BalaVelocidad = baseBalaVelocidad * factor;
+        
+        // Debug: Mostrar los valores alterados
+        Debug.Log("Valores alterados por dificultad:");
+        Debug.Log("idleRotationSpeed: " + idleRotationSpeed + 
+                  ", maxRotationAngle: " + maxRotationAngle + 
+                  ", BalaVelocidad: " + BalaVelocidad);
+
+        // Cambiar color según la dificultad
+        SetEnemyColor(dificultad);
+
+        // Si se asignó juanitoTorreta, asignar su gameobject a juanersioTorreta
+        if(juanitoTorreta != null)
+        {
+            juanersioTorreta = juanitoTorreta.gameObject;
+        }
+        else
+        {
+            Debug.LogWarning("juanitoTorreta no está asignado en " + gameObject.name);
+        }
+        
+        // Inicia la rotación idle
         StartCoroutine(rotateIdle());
     }
 
@@ -120,4 +167,23 @@ public class LookAtYon : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         block = false;
     }
+
+
+    #region IA Diff
+    void SetEnemyColor(float diff)
+{
+    if(diff >= 465) 
+    {
+        enemyRenderer.material.color = Color.red; // Dificultad alta
+    } 
+    else if(diff >= 310) 
+    {
+        enemyRenderer.material.color = Color.yellow; // Dificultad media
+    } 
+    else 
+    {
+        enemyRenderer.material.color = Color.green; // Dificultad baja
+    }
+}
+    #endregion
 }

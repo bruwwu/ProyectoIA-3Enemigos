@@ -20,6 +20,10 @@ public class RAbility : MonoBehaviour
         {
             DealDamageToJuanSquishi(other);
         }
+         else if (other.gameObject.CompareTag("JuanitoTorreta"))
+        {
+            DealDMGJuanitoTorreta();
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -39,6 +43,20 @@ public class RAbility : MonoBehaviour
         Debug.Log(GameManager.gameManager.NaomiBossMiViejaWe.Health);
 
         if (GameManager.gameManager.NaomiBossMiViejaWe.Health <= 0)
+        {
+            Debug.Log("Naomi Killed");
+            CancelInvoke(nameof(DealDamageToBoss));
+        }
+    }
+
+    void DealDMGJuanitoTorreta()
+    {
+        Debug.Log("R Hit on Boss!");
+        GameManager.gameManager.juanitoTorreta.DmgUnit(1);
+        bossHB_Slider.SetHealth(GameManager.gameManager.juanitoTorreta.Health);
+        Debug.Log(GameManager.gameManager.juanitoTorreta.Health);
+
+        if (GameManager.gameManager.juanitoTorreta.Health <= 0)
         {
             Debug.Log("Naomi Killed");
             CancelInvoke(nameof(DealDamageToBoss));

@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 6669508482992845290}
   m_Layer: 0
   m_Name: juanitoTorreta
-  m_TagString: Enemy
+  m_TagString: juanitoTorreta
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -216,9 +216,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6408126273609502631}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.6235912, z: -0, w: 0.7817507}
+  m_LocalRotation: {x: 0, y: -0.6235931, z: 0, w: 0.7817491}
   m_LocalPosition: {x: 4.77, y: 0.43, z: -5.57}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3.0435, y: 3.0435, z: 3.0435}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6062819368126954520}
@@ -310,14 +310,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   juanitoTorreta: {fileID: 8445454443837105774}
+  juanersioTorreta: {fileID: 0}
   player: {fileID: 0}
-  coneAngle: 30.6
-  coneDistance: 9.21
+  coneAngle: 45
+  coneDistance: 38
   idleRotationSpeed: 30
   maxRotationAngle: 90
   Mira: {fileID: 0}
   BalaPrefabInicio: {fileID: 4083188076122385718}
   BalaVelocidad: 500
+  enemyRenderer: {fileID: 4563424564425973540}
+  dificultad: 0
 --- !u!1 &8228769446028838719
 GameObject:
   m_ObjectHideFlags: 0

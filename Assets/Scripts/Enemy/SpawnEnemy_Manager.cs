@@ -10,42 +10,42 @@ public class SpawnEnemy_Manager : MonoBehaviour
     public GameObject juanitoSpawn_object;
     public Renderer juanitoRenderer;
 
-    public GameObject targetSpawn;
+    public PlayerInput pitufin; 
+    public GameObject[] spawnTargets;
+
+    void Awake()
+    {
+        pitufin = new PlayerInput(); // Instanciar aquí
+        pitufin.pitufin.KSpawner.performed += OnKCast;
+        pitufin.Enable(); // Habilitar las acciones
+    }
+    void OnKCast(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Spawner();
+    }
 
     void Start()
     {
-        juanitoRenderer = GetComponent<Renderer>();
+        if(juanitoTorreta == null)
+        {
+            Debug.LogError("LookAtYon component not found in the GameObject");
+        }
     }
 
     public void Spawner()
-    {
-        Debug.Log("AHHH ME DISTE CLICK");
-        difficulty();
+    { 
+        Debug.Log("penesotes");
+        GameObject targetSpawn = spawnTargets[Random.Range(0, spawnTargets.Length)];
         Instantiate(juanitoSpawn_object, targetSpawn.transform.position, Quaternion.identity);
     }
 
-
-    void difficulty()
+    void Update()
     {
-        dificultad = (juanitoTorreta.idleRotationSpeed * Random.Range(0.0f, 1.0f)) + (juanitoTorreta.maxRotationAngle * Random.Range(0.0f, 1.0f)) + (juanitoTorreta.BalaVelocidad * Random.Range(0.0f, 1.0f));
-        enemyColor(dificultad);
-    }
-
-    void enemyColor(float _dificultad)
-    {
-        if (dificultad >= 465) 
+        if(pitufin.pitufin.KSpawner.triggered)
         {
-            juanitoRenderer.material.color = Color.red; // Dificultad alta
-        } 
-        else if (dificultad >= 310) 
-        {
-            juanitoRenderer.material.color = Color.yellow; // Dificultad media
-        } 
-        else 
-        {
-            juanitoRenderer.material.color = Color.green; // Dificultad baja
+            Spawner();   
         }
-
     }
+
 
 }

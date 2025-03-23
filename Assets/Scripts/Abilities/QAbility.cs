@@ -57,6 +57,19 @@ public class QAbility : MonoBehaviour
                     Destroy(collider.gameObject, 2f);
                 }
             }
+            else if(collider.gameObject.CompareTag("juanitoTorreta"))
+        {
+            Debug.Log("Q a un juanitoTorreta");
+            GameManager.gameManager.juanitoTorreta.DmgUnit(10);
+            Debug.Log(GameManager.gameManager.juanitoTorreta.Health);
+            if(GameManager.gameManager.juanitoTorreta.Health == 0)
+            {
+                Debug.Log("juanitoTorreta Muerto");
+                 Vector3 newPosition = new Vector3(collider.gameObject.transform.position.x, 60f, collider.gameObject.transform.position.z);
+                collider.gameObject.transform.position = newPosition;
+                Destroy(collider.gameObject, 0.5f);
+            }
+        }
         }
     }
 }
