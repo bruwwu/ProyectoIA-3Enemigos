@@ -30,7 +30,7 @@ public class LookAtYon : MonoBehaviour
     public Renderer enemyRenderer;
     [SerializeField] private float dificultad;
     public Difficulty difficultyMode;
-    public float HP = GameManager.gameManager.juanitoTorreta.Health;
+    public float HP;
     public enum Difficulty
     {
         modoDiablo,
