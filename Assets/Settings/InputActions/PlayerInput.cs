@@ -234,6 +234,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CRestart"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac21cdc0-c2a2-4f1a-bdb9-62cb5e16c260"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -280,6 +289,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""KSpawner"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80c0de32-b5b1-4603-b48c-12ed7fb55551"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CRestart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -300,6 +320,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_pitufin_QAbility = m_pitufin.FindAction("QAbility", throwIfNotFound: true);
         m_pitufin_EAbility = m_pitufin.FindAction("EAbility", throwIfNotFound: true);
         m_pitufin_KSpawner = m_pitufin.FindAction("KSpawner", throwIfNotFound: true);
+        m_pitufin_CRestart = m_pitufin.FindAction("CRestart", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -451,6 +472,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_pitufin_QAbility;
     private readonly InputAction m_pitufin_EAbility;
     private readonly InputAction m_pitufin_KSpawner;
+    private readonly InputAction m_pitufin_CRestart;
     public struct PitufinActions
     {
         private @PlayerInput m_Wrapper;
@@ -459,6 +481,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @QAbility => m_Wrapper.m_pitufin_QAbility;
         public InputAction @EAbility => m_Wrapper.m_pitufin_EAbility;
         public InputAction @KSpawner => m_Wrapper.m_pitufin_KSpawner;
+        public InputAction @CRestart => m_Wrapper.m_pitufin_CRestart;
         public InputActionMap Get() { return m_Wrapper.m_pitufin; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -480,6 +503,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @KSpawner.started += instance.OnKSpawner;
             @KSpawner.performed += instance.OnKSpawner;
             @KSpawner.canceled += instance.OnKSpawner;
+            @CRestart.started += instance.OnCRestart;
+            @CRestart.performed += instance.OnCRestart;
+            @CRestart.canceled += instance.OnCRestart;
         }
 
         private void UnregisterCallbacks(IPitufinActions instance)
@@ -496,6 +522,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @KSpawner.started -= instance.OnKSpawner;
             @KSpawner.performed -= instance.OnKSpawner;
             @KSpawner.canceled -= instance.OnKSpawner;
+            @CRestart.started -= instance.OnCRestart;
+            @CRestart.performed -= instance.OnCRestart;
+            @CRestart.canceled -= instance.OnCRestart;
         }
 
         public void RemoveCallbacks(IPitufinActions instance)
@@ -528,5 +557,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnQAbility(InputAction.CallbackContext context);
         void OnEAbility(InputAction.CallbackContext context);
         void OnKSpawner(InputAction.CallbackContext context);
+        void OnCRestart(InputAction.CallbackContext context);
     }
 }

@@ -212,6 +212,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CRestart",
+                    "type": "Button",
+                    "id": "ac21cdc0-c2a2-4f1a-bdb9-62cb5e16c260",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -256,6 +265,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "KSpawner",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "80c0de32-b5b1-4603-b48c-12ed7fb55551",
+                    "path": "<Keyboard>/c",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CRestart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

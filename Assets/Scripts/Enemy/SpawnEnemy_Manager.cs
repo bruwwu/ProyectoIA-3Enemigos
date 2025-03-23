@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpawnEnemy_Manager : MonoBehaviour
 {
@@ -16,11 +17,17 @@ public class SpawnEnemy_Manager : MonoBehaviour
     {
         pitufin = new PlayerInput(); // Instanciar aquí
         pitufin.pitufin.KSpawner.performed += OnKCast;
+        pitufin.pitufin.CRestart.performed += OnCCast;
         pitufin.Enable(); // Habilitar las acciones
     }
     void OnKCast(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         Spawner();
+    }
+
+    void OnCCast(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Restart();
     }
 
     void Start()
@@ -55,6 +62,11 @@ public class SpawnEnemy_Manager : MonoBehaviour
         {
             Spawner();   
         }
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("EscenaFinal");
     }
 
 
