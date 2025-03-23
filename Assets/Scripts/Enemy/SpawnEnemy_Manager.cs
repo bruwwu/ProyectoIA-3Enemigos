@@ -6,7 +6,7 @@ public class SpawnEnemy_Manager : MonoBehaviour
 {
     [Header("Dificultad")]
     float dificultad;
-    private LookAtYon juanitoTorreta;
+    private LookAtYon lookAtYon;
     public GameObject juanitoSpawn_object;
     public Renderer juanitoRenderer;
 
@@ -26,10 +26,7 @@ public class SpawnEnemy_Manager : MonoBehaviour
 
     void Start()
     {
-        if(juanitoTorreta == null)
-        {
-            Debug.LogError("LookAtYon component not found in the GameObject");
-        }
+
     }
 
     public void Spawner()
@@ -37,6 +34,14 @@ public class SpawnEnemy_Manager : MonoBehaviour
         Debug.Log("penesotes");
         GameObject targetSpawn = spawnTargets[Random.Range(0, spawnTargets.Length)];
         Instantiate(juanitoSpawn_object, targetSpawn.transform.position, Quaternion.identity);
+
+        LookAtYon lookAtYon = juanitoSpawn_object.GetComponent<LookAtYon>();
+        if(lookAtYon != null)
+        {
+            // Random.Range(0,3) devolverá 0, 1 o 2, mapeando así a las tres opciones del enum
+            lookAtYon.difficultyMode = (LookAtYon.Difficulty)Random.Range(0, 3);
+            Debug.Log("Dificultad: " + lookAtYon.difficultyMode);
+        }
     }
 
     void Update()

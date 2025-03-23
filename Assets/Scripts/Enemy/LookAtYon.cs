@@ -7,7 +7,6 @@ public class LookAtYon : MonoBehaviour
 {
     [Header("VisionCone")]
     public Transform juanitoTorreta;
-    public GameObject juanersioTorreta;
     public Transform player;
     public float coneAngle;
     public float coneDistance;
@@ -29,8 +28,15 @@ public class LookAtYon : MonoBehaviour
 
     [Header("IA Diff")]
     public Renderer enemyRenderer;
-    public float dificultad;
-    
+    [SerializeField] private float dificultad;
+    public Difficulty difficultyMode;
+    public float HP = GameManager.gameManager.juanitoTorreta.Health;
+    public enum Difficulty
+    {
+        modoDiablo,
+        HPModifier,
+        darkwarrior777
+    }
     void Start()
     {
         // Obtiene el Renderer del GameObject para luego modificar el color
@@ -44,36 +50,49 @@ public class LookAtYon : MonoBehaviour
         float baseIdleRotationSpeed = idleRotationSpeed;
         float baseMaxRotationAngle = maxRotationAngle;
         float baseBalaVelocidad = BalaVelocidad;
+        float baseHP = GameManager.gameManager.juanitoTorreta.Health;
         
-        // Calculamos la dificultad en base a las propiedades originales
-        dificultad = (baseIdleRotationSpeed * Random.Range(0.0f, 1.0f)) +
-                     (baseMaxRotationAngle * Random.Range(0.0f, 1.0f)) +
-                     (baseBalaVelocidad * Random.Range(0.0f, 1.0f));
 
+        if(difficultyMode == Difficulty.modoDiablo)
+        {
+        // Calculamos la dificultad en base a las propiedades originales
+        dificultad = GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.8f, 2.0f) +
+                     (baseIdleRotationSpeed * Random.Range(0.5f, 1.0f)) +
+                     (baseMaxRotationAngle * Random.Range(0.5f, 1.0f)) +
+                     baseBalaVelocidad * Random.Range(0.5f, 1.0f);
+        }
+        else if(difficultyMode == Difficulty.HPModifier){
+        dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) + 
+                    baseBalaVelocidad * Random.Range(0.0f, 1.0f)) / 2;
+        }
+        else if (difficultyMode == Difficulty.darkwarrior777)
+        {
+            dificultad = (GameManager.gameManager.juanitoTorreta.Health * Random.Range(0.0f, 1.0f) +
+                     baseIdleRotationSpeed * Random.Range(0.0f, 1.0f) +
+                     baseMaxRotationAngle * Random.Range(0.0f, 1.0f) +
+                     baseBalaVelocidad * Random.Range(0.0f, 1.0f) * 2);
+        }
+        else
+        {
+            Debug.LogError("Modo de dificultad no reconocido");
+        }
         // Aplicar un factor de modificación basado en la dificultad (ajusta el divisor según lo que necesites)
         float factor = 1 + (dificultad / 500f);
+        HP = baseHP * factor;
         idleRotationSpeed = baseIdleRotationSpeed * factor;
         maxRotationAngle = baseMaxRotationAngle * factor;
         BalaVelocidad = baseBalaVelocidad * factor;
         
         // Debug: Mostrar los valores alterados
-        Debug.Log("Valores alterados por dificultad:");
-        Debug.Log("idleRotationSpeed: " + idleRotationSpeed + 
+        
+        Debug.Log("Valores alterados: " +
+                  "idleRotationSpeed: " + idleRotationSpeed +
                   ", maxRotationAngle: " + maxRotationAngle + 
-                  ", BalaVelocidad: " + BalaVelocidad);
+                  ", BalaVelocidad: " + BalaVelocidad +
+                  ", HP: " + HP);
 
         // Cambiar color según la dificultad
         SetEnemyColor(dificultad);
-
-        // Si se asignó juanitoTorreta, asignar su gameobject a juanersioTorreta
-        if(juanitoTorreta != null)
-        {
-            juanersioTorreta = juanitoTorreta.gameObject;
-        }
-        else
-        {
-            Debug.LogWarning("juanitoTorreta no está asignado en " + gameObject.name);
-        }
         
         // Inicia la rotación idle
         StartCoroutine(rotateIdle());
