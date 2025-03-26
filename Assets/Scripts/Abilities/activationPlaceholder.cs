@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,21 +11,23 @@ public class activationPlaceholder : MonoBehaviour
     public BossFSM bossFSM;
     public CloudDMG cloudDmg;
     public TMP_Text finalBattleTempo;
+
     [Header("Componentes/UI")]
-    //Inmune Timpe
     public TMP_Text inmuneTimer;
     public TMP_Text inmuneText;
-    //PlayerInput
-    public PlayerInput pitufin; 
-    //Q
+    public PlayerInput pitufin;
+
+    // Q
     public Image qImagen;
     public TMP_Text contadorQ;
     public TMP_Text duracionQ;
-    //R
+
+    // R
     public Image RImage;
     public TMP_Text contadorR;
     public TMP_Text duracionR;
-    //E
+
+    // E
     public Image EImage;
     public TMP_Text contadorE;
     public TMP_Text duracionE;
@@ -38,7 +39,6 @@ public class activationPlaceholder : MonoBehaviour
     public float EDuration = 2f;
     public GameObject eSlashOrigin;
     public float slashVelocity = 5f;
-
 
     [Header("Ultimate")]
     public GameObject swainUlt;
@@ -52,88 +52,112 @@ public class activationPlaceholder : MonoBehaviour
     public float qDuracion = .5f;
     [SerializeField] private bool qDisponible = true;
 
+    // 🛡️ Invencibilidad
+    public static bool isInvincible = false;
+
     void Awake()
     {
         pitufin = new PlayerInput();
 
-        // Configuración de Input para la Ultimate
         pitufin.pitufin.RAbility.performed += OnRCast;
         pitufin.pitufin.RAbility.canceled += OnRCast;
-        // Configuración de Input para la Q
         pitufin.pitufin.QAbility.performed += OnQCast;
-        //Configuracion Input E
         pitufin.pitufin.EAbility.performed += OnECast;
     }
 
     void Start()
     {
+        if (finalBattleTempo == null)
+        {
+            var obj = GameObject.Find("FinalBattleText");
+            finalBattleTempo = obj != null ? obj.GetComponent<TMP_Text>() : null;
+            if (finalBattleTempo == null) Debug.LogWarning("No se encontró 'finalBattleTempo'.");
+        }
+
+        if (bossFSM == null)
+        {
+            bossFSM = FindObjectOfType<BossFSM>();
+            if (bossFSM == null) Debug.LogWarning("No se encontró 'bossFSM'.");
+        }
+
         StartCoroutine(temporizadorFinal());
     }
 
     void Update()
     {
+        // Invencibilidad toggle con tecla I
+        if (Keyboard.current.iKey.wasPressedThisFrame)
+        {
+            isInvincible = !isInvincible;
+            Debug.Log("Invencibilidad " + (isInvincible ? "ACTIVADA" : "DESACTIVADA"));
+        }
     }
-    //BLOQUE DE HABILIDAD R
+
     void RActivation()
     {
         if (!RActive) return;
+
         RActive = false;
         swainUlt.SetActive(true);
-        RActive = true; // Activa la habilidad
         RImage.color = new Color(1, 1, 1, 0.5f);
 
         StartCoroutine(RIniciarDuracion());
     }
 
-    //Temporizador de la batalla final, gg papu :v
     IEnumerator temporizadorFinal()
     {
-        float tiempoRestante = bossFSM.wipeTemporizer;
+        float tiempoRestante = bossFSM != null ? bossFSM.wipeTemporizer : 10f;
 
         while (tiempoRestante > 0)
         {
-            finalBattleTempo.text = Mathf.CeilToInt(tiempoRestante).ToString();
+            if (finalBattleTempo != null)
+            {
+                finalBattleTempo.text = Mathf.CeilToInt(tiempoRestante).ToString();
+            }
             tiempoRestante--;
             yield return new WaitForSeconds(1f);
         }
-        finalBattleTempo.text = "gg papuh :v";
+
+        if (finalBattleTempo != null)
+        {
+            finalBattleTempo.text = "gg papuh :v";
+        }
+        else
+        {
+            Debug.Log("Fin de batalla: gg papuh :v");
+        }
     }
-    //webos
+
     public IEnumerator InmuneTime()
-{
-    float tiempoRestante = cloudDmg.duration;
-
-    // Mostrar el texto inicial de inmunidad
-    inmuneText.text = "Immunity: ";
-    inmuneTimer.text = tiempoRestante.ToString();
-
-    while (tiempoRestante > 0)
     {
-        // Actualizar el texto con el tiempo restante
-        inmuneTimer.text = Mathf.CeilToInt(tiempoRestante).ToString();
-        tiempoRestante--;
+        float tiempoRestante = cloudDmg.duration;
 
-        yield return new WaitForSeconds(1f);
+        inmuneText.text = "Immunity: ";
+        inmuneTimer.text = tiempoRestante.ToString();
+
+        while (tiempoRestante > 0)
+        {
+            inmuneTimer.text = Mathf.CeilToInt(tiempoRestante).ToString();
+            tiempoRestante--;
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        inmuneText.text = "";
+        inmuneTimer.text = "";
     }
-
-    // Limpiar el texto una vez que termine la inmunidad
-    inmuneText.text = "";
-    inmuneTimer.text = "";
-}
-
-
 
     IEnumerator RIniciarDuracion()
     {
-        float timepoRestante = RDuration;
+        float tiempoRestante = RDuration;
 
-        while (timepoRestante > 0)
+        while (tiempoRestante > 0)
         {
-            duracionR.text = Mathf.CeilToInt(timepoRestante).ToString();
-            timepoRestante--;
+            duracionR.text = Mathf.CeilToInt(tiempoRestante).ToString();
+            tiempoRestante--;
             yield return new WaitForSeconds(1f);
         }
-        RActive = false;
+
         duracionR.text = "";
         swainUlt.SetActive(false);
         StartCoroutine(RIniciarCooldown());
@@ -149,13 +173,14 @@ public class activationPlaceholder : MonoBehaviour
             yield return new WaitForSeconds(1f);
             tiempoRestante--;
         }
+
         RActive = true;
         RImage.color = Color.white;
         contadorR.text = "";
     }
-      void OnRCast(InputAction.CallbackContext context)
+
+    void OnRCast(InputAction.CallbackContext context)
     {
-        // Actualizar el estado de activación de la ultimate
         if (RActive && context.ReadValueAsButton())
         {
             RActivation();
@@ -164,22 +189,16 @@ public class activationPlaceholder : MonoBehaviour
         {
             Debug.Log("No sirvo we");
         }
+
         Debug.Log($"Ultimate activada: {RActive}, Fase:{context.phase}");
     }
 
-
-    //BLOQUE DE HABILIDAD Q
     void QActivation()
     {
-        if (!qDisponible) return; // Evitar activar Q si no está disponible
+        if (!qDisponible) return;
 
         qDisponible = false;
-
-        // Instanciar rayos en los puntos designados
         rayoPrefab.SetActive(true);
-
-        // Actualizar la interfaz visual del cooldown
-        
         StartCoroutine(QIniciarDuracion());
     }
 
@@ -194,20 +213,23 @@ public class activationPlaceholder : MonoBehaviour
             yield return new WaitForSeconds(1f);
             tiempoRestante--;
         }
+
         qDisponible = true;
         qImagen.color = Color.white;
         contadorQ.text = "";
     }
-     IEnumerator QIniciarDuracion()
-    {
-        float timepoRestante = qDuracion;
 
-        while (timepoRestante > 0)
+    IEnumerator QIniciarDuracion()
+    {
+        float tiempoRestante = qDuracion;
+
+        while (tiempoRestante > 0)
         {
-            duracionQ.text = timepoRestante.ToString("F2");
+            duracionQ.text = tiempoRestante.ToString("F2");
             yield return null;
-            timepoRestante -= Time.deltaTime;
+            tiempoRestante -= Time.deltaTime;
         }
+
         qImagen.color = new Color(1, 1, 1, 0.5f);
         qDisponible = false;
         duracionQ.text = "";
@@ -217,7 +239,6 @@ public class activationPlaceholder : MonoBehaviour
 
     void OnQCast(InputAction.CallbackContext context)
     {
-        // Activar Q solo si está disponible
         if (qDisponible && context.ReadValueAsButton())
         {
             QActivation();
@@ -229,15 +250,12 @@ public class activationPlaceholder : MonoBehaviour
         }
     }
 
-    //BLOQUE HABILIDADES E
-
     void EActivate()
     {
-        if (!EActive) return; // Salir si no está disponible
-        EActive = false;      // Deshabilitar la habilidad durante su uso
+        if (!EActive) return;
 
-        EImage.color = new Color(1, 1, 1, 0.5f); // Indicar visualmente que está en cooldown
-
+        EActive = false;
+        EImage.color = new Color(1, 1, 1, 0.5f);
         StartCoroutine(EIniciarHabilidad());
     }
 
@@ -248,22 +266,17 @@ public class activationPlaceholder : MonoBehaviour
         while (tiempoRestante > 0)
         {
             Quaternion adjustedRotation = eSlashOrigin.transform.rotation * quaternion.Euler(-90, 0, 0);
-            // Instanciar el slash desde el origen
             GameObject newSlash = Instantiate(eSlash, eSlashOrigin.transform.position, adjustedRotation);
             Rigidbody rb = newSlash.GetComponent<Rigidbody>();
-            
-            // Aplicar fuerza al slash
             rb.AddForce(eSlashOrigin.transform.forward * slashVelocity, ForceMode.Impulse);
 
-            Destroy(newSlash, 0.4f); // Destruir después de 0.4 segundos
-
-            yield return new WaitForSeconds(0.5f); // Intervalo entre slashes
+            Destroy(newSlash, 0.4f);
+            yield return new WaitForSeconds(0.5f);
             tiempoRestante -= 0.5f;
         }
 
-        // Finalizar la habilidad
         EImage.color = new Color(1, 1, 1, 0.5f);
-        duracionE.text = ""; // Limpiar texto de duración
+        duracionE.text = "";
         StartCoroutine(EIniciarCooldown());
     }
 
@@ -273,15 +286,14 @@ public class activationPlaceholder : MonoBehaviour
 
         while (tiempoRestante > 0)
         {
-            contadorE.text = Mathf.CeilToInt(tiempoRestante).ToString(); // Mostrar cooldown
+            contadorE.text = Mathf.CeilToInt(tiempoRestante).ToString();
             yield return new WaitForSeconds(1f);
             tiempoRestante--;
         }
 
-        // Reiniciar la habilidad
         EActive = true;
         EImage.color = Color.white;
-        contadorE.text = ""; // Limpiar el contador
+        contadorE.text = "";
     }
 
     void OnECast(InputAction.CallbackContext context)
@@ -294,10 +306,9 @@ public class activationPlaceholder : MonoBehaviour
         {
             Debug.Log("La habilidad E no está disponible.");
         }
+
         Debug.Log($"Habilidad E activada: {EActive}, Fase: {context.phase}");
     }
-
-    //Mamadams para activar el pitufin (Input Action)
 
     void OnEnable()
     {
