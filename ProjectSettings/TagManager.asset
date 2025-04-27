@@ -17,6 +17,7 @@ TagManager:
   - Zona 5
   - Boss
   - JuanSquishi
+  - JuanReferencia
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - UI
   - Enemy
   - Wall
-  - 
+  - Juan Referencia
   - 
   - 
   - 

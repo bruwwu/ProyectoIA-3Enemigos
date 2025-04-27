@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Utilities;
 using DebugManager;
+using System.Collections.Generic;
 
 public class LookAtYon : MonoBehaviour
 {
@@ -139,8 +140,42 @@ public class LookAtYon : MonoBehaviour
                   ", HP: " + HP +
                   ", coneDistance: " + coneDistance);
         
-        SetEnemyColor(dificultad); //Color en base a la dificultad calculada en cada una de las
+        // ===========
+        // 2. Crear EnemyStats basado en los valores ya modificados
+        // ===========
+        EnemyStats baseStats = new EnemyStats();
+        baseStats.maxHP = HP;
+        baseStats.bulletSpeed = BalaVelocidad;
+        baseStats.rotationSpeed = idleRotationSpeed;
+        baseStats.rotationAngle = maxRotationAngle;
+        baseStats.coneDistance = coneDistance;
+        baseStats.difficultyValue = DifficultyFunction(baseStats); // Puedes basarla en como midas dificultad
+
+        PcgEnemy baseEnemy = new PcgEnemy();
+        baseEnemy.stats = baseStats;
+
+        // ===========
+        // 3. Aplicar GreedySearch
+        // ===========
+        EnemyStats mejorado = GreedySearch(baseEnemy);
+
+        // ===========
+        // 4. Actualizar los valores del enemigo con lo que mejoró
+        // ===========
+        HP = mejorado.maxHP;
+        BalaVelocidad = mejorado.bulletSpeed;
+        idleRotationSpeed = mejorado.rotationSpeed;
+        maxRotationAngle = mejorado.rotationAngle;
+        coneDistance = mejorado.coneDistance;
+        dificultad = mejorado.difficultyValue;
+
+        // ===========
+        // 5. Terminar como siempre
+        // ===========
+        SetEnemyColor(dificultad);
         StartCoroutine(rotateIdle());
+
+        Debug.Log("Stats finales tras switch + GreedySearch: " + mejorado.PrintStats());
     }
 
     void Update()
@@ -167,6 +202,73 @@ public class LookAtYon : MonoBehaviour
             }
         }
     }
+
+    EnemyStats GreedySearch(PcgEnemy origin)
+    {
+        EnemyStats currentNode = origin.stats;
+
+        PriorityQueue openList = new PriorityQueue(false); // Menor dificultadValue primero
+        openList.Enqueue(currentNode, currentNode.difficultyValue);
+
+        HashSet<EnemyStats> closedList = new HashSet<EnemyStats>();
+
+        int maxGreedySearchIterations = 50;
+        float greedySearchTolerance = 0.05f; // Umbral de mejora para seguir buscando
+
+        int currentIteration = 0;
+
+        while (currentIteration < maxGreedySearchIterations && openList.Count > 0)
+        {
+            currentIteration++;
+            currentNode = openList.Dequeue();
+            closedList.Add(currentNode);
+
+            // Generar vecinos (pequeñas variaciones)
+            GenerateNeighbors(currentNode, openList);
+
+            // Condición de terminación greedy: ¿el mejor vecino no mejora suficiente?
+            if (openList.First().Item2 + greedySearchTolerance < currentNode.difficultyValue)
+            {
+                break;
+            }
+        }
+
+        return currentNode;
+    }
+
+    void GenerateNeighbors(EnemyStats current, PriorityQueue openList)
+    {
+        float hpStep = 5f;
+        float speedStep = 0.5f;
+        float angleStep = 5f;
+        float coneStep = 0.5f;
+
+        EnemyStats[] neighbors = new EnemyStats[]
+        {
+            new EnemyStats(current) { maxHP = Mathf.Clamp(current.maxHP + hpStep, 300, 500) }, 
+            new EnemyStats(current) { bulletSpeed = Mathf.Clamp(current.bulletSpeed + speedStep, 300, 500) },
+            new EnemyStats(current) { rotationSpeed = Mathf.Clamp(current.rotationSpeed + speedStep, 15, 30) },
+            new EnemyStats(current) { rotationAngle = Mathf.Clamp(current.rotationAngle + angleStep, 30, 90) },
+            new EnemyStats(current) { coneDistance = Mathf.Clamp(current.coneDistance + coneStep, 38, 50) },
+        };
+
+        foreach (var neighbor in neighbors)
+        {
+            neighbor.difficultyValue = DifficultyFunction(neighbor);
+            openList.Enqueue(neighbor, neighbor.difficultyValue);
+        }
+    }
+
+    float DifficultyFunction(EnemyStats stats)
+    {
+        //Los pesos si se quiere que HP pese más, o balaVelocidad pese más
+        return (stats.maxHP * 0.2f) + 
+            (stats.bulletSpeed * 0.1f) + 
+            (stats.rotationSpeed * 0.1f) + 
+            (stats.rotationAngle * 0.1f) + 
+            (stats.coneDistance * 0.1f);
+    }
+
 
     void OnDrawGizmos()
     {
