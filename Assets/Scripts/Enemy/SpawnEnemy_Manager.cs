@@ -5,24 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class SpawnEnemy_Manager : MonoBehaviour
 {
-    [Header("Dificultad")]
-    private LookAtYon lookAtYon;
+    [Header("Referencias")]
     public GameObject juanitoSpawn_object;
-    public Renderer juanitoRenderer;
+    public GameObject[] spawnTargets; // Puntos de spawn
+    public PlayerInput pitufin;
 
-    public PlayerInput pitufin; 
-    public GameObject[] spawnTargets; //Array de los puntos de spawn
+    [Header("Control de Rondas")]
+    private int currentRound = 1;
+    private int enemiesAlive = 0;
+    private float difficultyWeight = 0.1f;
 
     void Awake()
     {
-        pitufin = new PlayerInput(); // Instanciar aquí
+        pitufin = new PlayerInput();
         pitufin.pitufin.KSpawner.performed += OnKCast;
         pitufin.pitufin.CRestart.performed += OnCCast;
-        pitufin.Enable(); // Habilitar las acciones
+        pitufin.Enable();
     }
+
     void OnKCast(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Spawner();
+        // No usamos este directamente. Controlamos desde Update()
     }
 
     void OnCCast(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -30,79 +33,79 @@ public class SpawnEnemy_Manager : MonoBehaviour
         Restart();
     }
 
-    void Start()
-    {
-
-    }
-
     public void Spawner()
-    { 
-        /*Muy bien, aqui al dar la K los enemigos harán spawn en alguno de los puntos asignados en el inspector
-        Se intancia el enemigo en la posicion del targetspawn con la rotacion base.
-        Se obtiene el componente (script) de juanito torreta
-        despues se verifica que no esté nulo para de ahi poder asignarle una de las 4 dificultades que tenemos 
-        tambien se imprime en consola cual se asignó :p*/
-
-        LookAtYon[] activeEnemies = GameObject.FindObjectsOfType<LookAtYon>();
-        foreach (var enemy in activeEnemies)
+    {
+        if (juanitoSpawn_object == null)
         {
-            if (enemy.gameObject.layer == LayerMask.NameToLayer("Juan Referencia"))
-            {
-                // Si el enemigo es el de referencia, lo ignoramos
-                continue;
-            }
-
-            Debug.Log("Ya hay enemigos en la escena. No se puede spawnear más.");
+            Debug.LogError("juanitoSpawn_object no está asignado. No se puede spawnear.");
             return;
         }
 
-
-        // Lista de puntos de spawn disponibles
-        List<GameObject> availableSpawnPoints = new List<GameObject>(spawnTargets);
-
-        // Verificar si hay puntos de spawn disponibles
-        if (availableSpawnPoints.Count == 0)
+        if (spawnTargets.Length == 0)
         {
             Debug.LogWarning("No hay puntos de spawn disponibles.");
             return;
         }
 
-        // Iterar sobre los puntos de spawn y generar un enemigo en cada uno
-        foreach (GameObject targetSpawn in availableSpawnPoints)
+        foreach (GameObject targetSpawn in spawnTargets)
         {
             GameObject spawnedEnemy = Instantiate(juanitoSpawn_object, targetSpawn.transform.position, Quaternion.identity);
-
-            // Cambiar la layer del enemigo instanciado
             spawnedEnemy.layer = LayerMask.NameToLayer("Enemy");
 
-            // Obtener el componente LookAtYon del enemigo instanciado
             LookAtYon lookAtYon = spawnedEnemy.GetComponent<LookAtYon>();
             if (lookAtYon != null)
             {
-                // Asignar una dificultad aleatoria
                 lookAtYon.difficultyMode = (LookAtYon.Difficulty)Random.Range(0, 4);
                 Debug.Log("Dificultad asignada: " + lookAtYon.difficultyMode);
+                Debug.Log($"Spawneado enemigo con stats: " +
+                            $"HP={lookAtYon.HP}, " +
+                            $"BulletSpeed={lookAtYon.BalaVelocidad}, " +
+                            $"RotationSpeed={lookAtYon.idleRotationSpeed}, " +
+                            $"RotationAngle={lookAtYon.maxRotationAngle}, " +
+                            $"ConeDistance={lookAtYon.coneDistance}");
+
             }
             else
             {
                 Debug.LogError("El objeto instanciado no tiene el componente LookAtYon.");
             }
+
+            enemiesAlive++;
         }
+
+        Debug.Log("¡Ronda " + currentRound + " iniciada con " + enemiesAlive + " enemigos!");
+
     }
 
-    void Update()
+    public void EnemyDied()
     {
-        // Si se presiona la tecla K, se invoca el método Spawner sencillito 
-        if(pitufin.pitufin.KSpawner.triggered)
-        {
-            Spawner();   
-        }
+        enemiesAlive--;
+
+        // Aquí ya NO subimos dificultad, solo mostramos que murió.
     }
+
+    void SpawnNextWave()
+    {
+        LookAtYon.difficultyWeight += 0.1f;
+        LookAtYon.difficultyWeight = Mathf.Clamp(LookAtYon.difficultyWeight, 0.1f, 0.5f);
+
+        currentRound++;
+        Debug.Log("Subiendo a ronda " + currentRound + " con dificultadWeight ahora en: " + LookAtYon.difficultyWeight);
+
+        Spawner(); 
+    }
+
 
     public void Restart()
     {
         SceneManager.LoadScene("EscenaFinal");
     }
 
-
+    void Update()
+    {
+        if (pitufin.pitufin.KSpawner.triggered)
+        {
+            SpawnNextWave();
+        }
+    }
 }
